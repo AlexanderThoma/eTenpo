@@ -8,5 +8,13 @@ public class Product : AggregateRoot
     {
     }
     
+    public string Description { get; set; }
     
+    public string Name { get; set; }
+
+    public string[] Tags { get; set; }
+    
+    public decimal Price { get; set; }
+    
+    public Guid[] Categories { get; set; }
 }

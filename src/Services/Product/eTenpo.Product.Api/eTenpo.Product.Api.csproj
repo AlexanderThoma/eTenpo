@@ -10,6 +10,7 @@
     <ItemGroup>
         <PackageReference Include="MediatR" Version="12.0.1" />
         <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="7.0.3" />
+        <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks" Version="7.0.3" />
         <PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0" />
     </ItemGroup>
 
@@ -22,6 +23,11 @@
     <ItemGroup>
       <ProjectReference Include="..\eTenpo.Product.Domain\eTenpo.Product.Domain.csproj" />
       <ProjectReference Include="..\eTenpo.Product.Infrastructure\eTenpo.Product.Infrastructure.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="Services\Category" />
+      <Folder Include="Services\Product" />
     </ItemGroup>
 
 </Project>
