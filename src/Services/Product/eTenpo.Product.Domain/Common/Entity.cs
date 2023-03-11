@@ -1,12 +1,13 @@
-using MediatR;
-
 namespace eTenpo.Product.Domain.Common;
 
+/// <summary>
+/// Mutable object with an identity (guid)
+/// </summary>
 public abstract class Entity
 {
-    protected Entity(Guid id)
+    protected Entity()
     {
-        Id = id;
+        Id = Guid.NewGuid();
     }
     
     public Guid Id { get; }
