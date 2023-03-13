@@ -4,7 +4,7 @@ namespace eTenpo.Product.Infrastructure.Repositories;
 
 public class CategoryRepository : ICategoryRepository
 {
-    public CategoryRepository(ProductDbContext dbContext)
+    public CategoryRepository(ApplicationDbContext dbContext)
     {
         
     }

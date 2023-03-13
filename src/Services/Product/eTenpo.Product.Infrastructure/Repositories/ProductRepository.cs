@@ -4,8 +4,10 @@ namespace eTenpo.Product.Infrastructure.Repositories;
 
 public class ProductRepository : IProductRepository
 {
-    public ProductRepository(ProductDbContext dbContext)
+    private readonly ApplicationDbContext dbContext;
+
+    public ProductRepository(ApplicationDbContext dbContext)
     {
-        
+        this.dbContext = dbContext;
     }
 }

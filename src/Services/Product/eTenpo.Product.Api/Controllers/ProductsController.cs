@@ -1,3 +1,7 @@
+using AutoMapper;
+using eTenpo.Product.Api.Application.ProductFeature.Create;
+using eTenpo.Product.Api.Application.ProductFeature.Delete;
+using eTenpo.Product.Api.Dtos.Product;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
@@ -7,11 +11,13 @@ public class ProductsController : CustomBaseController
 {
     private readonly ILogger<ProductsController> logger;
     private readonly IMediator mediator;
+    private readonly IMapper mapper;
 
-    public ProductsController(ILogger<ProductsController> logger, IMediator mediator)
+    public ProductsController(ILogger<ProductsController> logger, IMediator mediator, IMapper mapper)
     {
         this.logger = logger;
         this.mediator = mediator;
+        this.mapper = mapper;
     }
 
     [HttpPost]
@@ -20,10 +26,11 @@ public class ProductsController : CustomBaseController
     public async Task<ActionResult> Create([FromBody] CreateProductDto dto)
     {
         // TODO: map dto to command
+        var command = this.mapper.Map<ProductCreateCommand>(dto);
         
-        var response = await this.mediator.Send(dto);
-        
-        throw new NotImplementedException();
+        var response = await this.mediator.Send(command);
+
+        return this.CreatedAtAction(nameof(GetSingle), new { id = response.Id });
     }
     
     [HttpGet]
@@ -56,6 +63,8 @@ public class ProductsController : CustomBaseController
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<ActionResult> Delete(Guid id)
     {
-        throw new NotImplementedException();
+        var response = await this.mediator.Send(new ProductDeleteCommand(id));
+
+        return this.NoContent();
     }
 }

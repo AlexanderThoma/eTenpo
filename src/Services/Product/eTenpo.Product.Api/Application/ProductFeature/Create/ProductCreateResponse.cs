@@ -1,6 +1,6 @@
 namespace eTenpo.Product.Api.Application.ProductFeature.Create;
 
-public record ProductCreateResponse
+public class ProductCreateResponse
 {
-    
+    public Guid Id { get; set; }
 }

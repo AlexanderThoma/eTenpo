@@ -1,5 +1,3 @@
-
-using eTenpo.Product.Api.Application.ProductFeature.Commands.Delete;
 using FluentValidation;
 
 namespace eTenpo.Product.Api.Application.ProductFeature.Delete;
