@@ -1,4 +1,3 @@
-using eTenpo.Product.Api.Application.ProductFeature.Commands.Update;
 using MediatR;
 
 namespace eTenpo.Product.Api.Application.ProductFeature.Update;

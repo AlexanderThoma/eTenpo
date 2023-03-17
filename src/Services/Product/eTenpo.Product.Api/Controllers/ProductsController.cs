@@ -25,7 +25,6 @@ public class ProductsController : CustomBaseController
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<ActionResult> Create([FromBody] CreateProductDto dto)
     {
-        // TODO: map dto to command
         var command = this.mapper.Map<ProductCreateCommand>(dto);
         
         var response = await this.mediator.Send(command);

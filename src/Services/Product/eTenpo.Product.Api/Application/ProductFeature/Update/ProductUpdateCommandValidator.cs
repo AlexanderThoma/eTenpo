@@ -1,4 +1,3 @@
-using eTenpo.Product.Api.Application.ProductFeature.Commands.Update;
 using FluentValidation;
 
 namespace eTenpo.Product.Api.Application.ProductFeature.Update;
