@@ -1,7 +1,13 @@
 ﻿FROM mcr.microsoft.com/dotnet/aspnet:7.0 AS base
 WORKDIR /app
-EXPOSE 80
-EXPOSE 443
+# only expose http port (ssl will be done by gateway)
+EXPOSE 5000
+ENV ASPNETCORE_URLS=http://+:5000
+
+FROM base AS base-release
+# restrict access to publish folder
+RUN adduser -u 6539 --disabled-password --gecos "" appuser && chown -R appuser /app
+USER appuser
 
 FROM mcr.microsoft.com/dotnet/sdk:7.0 AS build
 WORKDIR /src
@@ -12,9 +18,10 @@ WORKDIR "/src/Services/Product/eTenpo.Product.Api"
 RUN dotnet build "eTenpo.Product.Api.csproj" -c Release -o /app/build
 
 FROM build AS publish
-RUN dotnet publish "eTenpo.Product.Api.csproj" -c Release -o /app/publish
+# /p -> prevent generation of executable
+RUN dotnet publish "eTenpo.Product.Api.csproj" -c Release -o /app/publish /p:UseAppHost=false
 
-FROM base AS final
+FROM base-release AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
 ENTRYPOINT ["dotnet", "eTenpo.Product.Api.dll"]

@@ -1,5 +1,5 @@
 using eTenpo.Product.Domain.Common;
-using eTenpo.Product.Domain.Exceptions;
+using eTenpo.Product.Domain.Exceptions.Base;
 
 namespace eTenpo.Product.Domain.AggregateRoots.ProductAggregate;
 

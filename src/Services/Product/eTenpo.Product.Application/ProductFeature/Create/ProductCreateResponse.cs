@@ -1,4 +1,4 @@
-namespace eTenpo.Product.Api.Application.ProductFeature.Create;
+namespace eTenpo.Product.Application.ProductFeature.Create;
 
 public class ProductCreateResponse
 {

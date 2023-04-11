@@ -1,6 +1,6 @@
 using MediatR;
 
-namespace eTenpo.Product.Api.Application.ProductFeature.Create;
+namespace eTenpo.Product.Application.ProductFeature.Create;
 
 public class ProductCreateCommandHandler : IRequestHandler<ProductCreateCommand, ProductCreateResponse>
 {

@@ -1,6 +1,6 @@
 using MediatR;
 
-namespace eTenpo.Product.Api.Application.ProductFeature.Update;
+namespace eTenpo.Product.Application.ProductFeature.Update;
 
 public class ProductUpdateCommandHandler : IRequestHandler<ProductUpdateCommand, ProductUpdateResponse>
 {

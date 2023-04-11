@@ -1,6 +1,6 @@
 using MediatR;
 
-namespace eTenpo.Product.Api.Application.ProductFeature.Delete;
+namespace eTenpo.Product.Application.ProductFeature.Delete;
 
 public class ProductDeleteCommandHandler : IRequestHandler<ProductDeleteCommand, ProductDeleteResponse>
 {

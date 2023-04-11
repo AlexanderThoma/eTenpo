@@ -1,7 +1,9 @@
 using AutoMapper;
-using eTenpo.Product.Api.Application.ProductFeature.Create;
-using eTenpo.Product.Api.Application.ProductFeature.Delete;
 using eTenpo.Product.Api.Dtos.Product;
+using eTenpo.Product.Application.ProductFeature.Create;
+using eTenpo.Product.Application.ProductFeature.Delete;
+using eTenpo.Product.Application.ProductFeature.Read;
+using eTenpo.Product.Application.ProductFeature.Update;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
@@ -23,7 +25,7 @@ public class ProductsController : CustomBaseController
     [HttpPost]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public async Task<ActionResult> Create([FromBody] CreateProductDto dto)
+    public async Task<ActionResult<ProductCreateResponse>> Create([FromBody] CreateProductDto dto)
     {
         var command = this.mapper.Map<ProductCreateCommand>(dto);
         
@@ -34,26 +36,30 @@ public class ProductsController : CustomBaseController
     
     [HttpGet]
     [ProducesResponseType(StatusCodes.Status200OK)]
-    public async Task<ActionResult> GetAll()
+    public async Task<ActionResult<List<ProductGetAllResponse>>> GetAll()
     {
-        throw new NotImplementedException();
+        return this.Ok(await this.mediator.Send(new ProductGetAllRequest()));
     }
     
     [HttpGet("{id:guid}")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<ActionResult> GetSingle(Guid id)
+    public async Task<ActionResult<ProductGetSingleResponse>> GetSingle(Guid id)
     {
-        throw new NotImplementedException();
+        return this.Ok(await this.mediator.Send(new ProductGetSingleRequest(id)));
     }
     
     [HttpPut("{id:guid}")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<ActionResult> Update(Guid id, [FromBody] UpdateProductDto dto)
+    public async Task<ActionResult<ProductUpdateResponse>> Update(Guid id, [FromBody] UpdateProductDto dto)
     {
-        throw new NotImplementedException();
+        var command = this.mapper.Map<ProductUpdateCommand>(dto, options => options.AfterMap((src, dest) => dest.Id = id));
+
+        var response = await this.mediator.Send(command);
+
+        return this.Ok(response);
     }
     
     [HttpDelete("{id:guid}")]
@@ -62,7 +68,7 @@ public class ProductsController : CustomBaseController
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<ActionResult> Delete(Guid id)
     {
-        var response = await this.mediator.Send(new ProductDeleteCommand(id));
+        await this.mediator.Send(new ProductDeleteCommand(id));
 
         return this.NoContent();
     }

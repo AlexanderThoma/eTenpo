@@ -1,6 +1,6 @@
-namespace eTenpo.Product.Domain.Exceptions;
+namespace eTenpo.Product.Domain.Exceptions.Base;
 
-public class ProductDomainException : Exception
+public abstract class ProductDomainException : Exception
 {
     public ProductDomainException()
     {
