@@ -1,4 +1,5 @@
 using eTenpo.Product.Domain.Common;
+using eTenpo.Product.Domain.Exceptions;
 using eTenpo.Product.Domain.Exceptions.Base;
 
 namespace eTenpo.Product.Domain.AggregateRoots.ProductAggregate;
@@ -9,7 +10,7 @@ public class Price : ValueObject
     {
         if (value <= 0)
         {
-            throw new BadRequestException("Price can not be zero or negative",
+            throw new ProductValidationException("Price can not be zero or negative",
                 new ArgumentException(null, nameof(value)));
         }
 

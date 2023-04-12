@@ -1,4 +1,6 @@
 using eTenpo.Product.Domain.Common;
+using eTenpo.Product.Domain.DomainEvents;
+using eTenpo.Product.Domain.Exceptions;
 using eTenpo.Product.Domain.Exceptions.Base;
 
 namespace eTenpo.Product.Domain.AggregateRoots.ProductAggregate;
@@ -22,8 +24,6 @@ public class Product : AggregateRoot
 
     public void UpdateName(Name newName)
     {
-        // todo: trigger domain event for updated name
-        
         this.Name = newName;
     }
     
@@ -34,9 +34,9 @@ public class Product : AggregateRoot
     
     public void UpdatePrice(Price newPrice)
     {
-        // todo: trigger domain event for updated price
-        
         this.Price = newPrice;
+        
+        this.AddDomainEvent(new ProductPriceUpdatedEvent(this.Id, this.Price.Value, newPrice.Value));
     }
 
     // maybe skip for less complexity (event must be triggered if filtering by category
@@ -56,7 +56,7 @@ public class Product : AggregateRoot
     {
         if (amount < 1)
         {
-            throw new ProductDomainException("Amount must not be less or equal than zero");
+            throw new ProductValidationException("Amount must not be less or equal than zero");
         }
         
         this.AvailableStock = this.AvailableStock.Add(amount);
@@ -66,8 +66,7 @@ public class Product : AggregateRoot
     {
         if (this.AvailableStock.Value - amount < 0)
         {
-            // TODO: do something useful if stock is not sufficient
-            throw new ProductDomainException("Not enough stock available");
+            throw new ProductValidationException("Not enough stock available");
         }
         
         this.AvailableStock = this.AvailableStock.Remove(amount);

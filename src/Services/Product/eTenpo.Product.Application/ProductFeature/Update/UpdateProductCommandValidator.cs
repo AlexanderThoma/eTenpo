@@ -1,10 +1,10 @@
 using FluentValidation;
 
-namespace eTenpo.Product.Application.ProductFeature.Create;
+namespace eTenpo.Product.Application.ProductFeature.Update;
 
-public class CreateProductCommandValidator : AbstractValidator<CreateProductCommand>
+public class UpdateProductCommandValidator : AbstractValidator<UpdateProductCommand>
 {
-    public CreateProductCommandValidator()
+    public UpdateProductCommandValidator()
     {
         RuleFor(p => p.Name)
             .NotEmpty()

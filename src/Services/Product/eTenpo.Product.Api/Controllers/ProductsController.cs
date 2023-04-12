@@ -8,16 +8,14 @@ using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
 namespace eTenpo.Product.Api.Controllers;
-
-public class ProductsController : CustomBaseController
+// TODO: Add Logging
+public class ProductsController : BaseApiController
 {
-    private readonly ILogger<ProductsController> logger;
     private readonly IMediator mediator;
     private readonly IMapper mapper;
 
-    public ProductsController(ILogger<ProductsController> logger, IMediator mediator, IMapper mapper)
+    public ProductsController(IMediator mediator, IMapper mapper)
     {
-        this.logger = logger;
         this.mediator = mediator;
         this.mapper = mapper;
     }
@@ -25,9 +23,9 @@ public class ProductsController : CustomBaseController
     [HttpPost]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public async Task<ActionResult<ProductCreateResponse>> Create([FromBody] CreateProductDto dto)
+    public async Task<ActionResult<CreateProductCommandResponse>> Create([FromBody] CreateProductDto dto)
     {
-        var command = this.mapper.Map<ProductCreateCommand>(dto);
+        var command = this.mapper.Map<CreateProductCommand>(dto);
         
         var response = await this.mediator.Send(command);
 
@@ -36,39 +34,39 @@ public class ProductsController : CustomBaseController
     
     [HttpGet]
     [ProducesResponseType(StatusCodes.Status200OK)]
-    public async Task<ActionResult<List<ProductGetAllResponse>>> GetAll()
+    public async Task<ActionResult<List<GetAllProductsResponse>>> GetAll()
     {
-        return this.Ok(await this.mediator.Send(new ProductGetAllRequest()));
+        return this.Ok(await this.mediator.Send(new GetAllProductsRequest()));
     }
     
     [HttpGet("{id:guid}")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<ActionResult<ProductGetSingleResponse>> GetSingle(Guid id)
+    public async Task<ActionResult<GetSingleProductResponse>> GetSingle(Guid id)
     {
-        return this.Ok(await this.mediator.Send(new ProductGetSingleRequest(id)));
+        return this.Ok(await this.mediator.Send(new GetSingleProductRequest(id)));
     }
     
     [HttpPut("{id:guid}")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<ActionResult<ProductUpdateResponse>> Update(Guid id, [FromBody] UpdateProductDto dto)
+    public async Task<ActionResult<UpdateProductResponse>> Update(Guid id, [FromBody] UpdateProductDto dto)
     {
-        var command = this.mapper.Map<ProductUpdateCommand>(dto, options => options.AfterMap((src, dest) => dest.Id = id));
+        var command = this.mapper.Map<UpdateProductCommand>(dto, options => options.AfterMap((src, dest) => dest.Id = id));
 
         var response = await this.mediator.Send(command);
 
         return this.Ok(response);
     }
-    
+
     [HttpDelete("{id:guid}")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<ActionResult> Delete(Guid id)
     {
-        await this.mediator.Send(new ProductDeleteCommand(id));
+        await this.mediator.Send(new DeleteProductCommand(id));
 
         return this.NoContent();
     }

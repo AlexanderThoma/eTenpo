@@ -1,8 +1,6 @@
-using MediatR;
+﻿namespace eTenpo.Product.Api.Dtos.Product;
 
-namespace eTenpo.Product.Application.ProductFeature.Create;
-
-public class ProductCreateCommand : IRequest<ProductCreateResponse>
+public abstract class ProductBaseDto
 {
     public string Name { get; set; }
     

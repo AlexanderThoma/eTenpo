@@ -1,4 +1,5 @@
 using eTenpo.Product.Domain.Common;
+using eTenpo.Product.Domain.Exceptions;
 using eTenpo.Product.Domain.Exceptions.Base;
 
 namespace eTenpo.Product.Domain.AggregateRoots.ProductAggregate;
@@ -9,7 +10,7 @@ public class Name : ValueObject
     {
         if (string.IsNullOrWhiteSpace(value))
         {
-            throw new BadRequestException("Name is null or whitespace",
+            throw new ProductValidationException("Name is null or whitespace",
                 new ArgumentException(null, nameof(value)));
         }
         

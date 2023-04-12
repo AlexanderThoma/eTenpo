@@ -1,6 +1,3 @@
 namespace eTenpo.Product.Application.ProductFeature.Delete;
 
-public record ProductDeleteResponse
-{
-    
-}
+public record DeleteProductResponse(Guid Id);

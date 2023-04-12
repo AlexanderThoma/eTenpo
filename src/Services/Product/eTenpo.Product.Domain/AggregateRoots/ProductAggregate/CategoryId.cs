@@ -1,4 +1,5 @@
 using eTenpo.Product.Domain.Common;
+using eTenpo.Product.Domain.Exceptions;
 using eTenpo.Product.Domain.Exceptions.Base;
 
 namespace eTenpo.Product.Domain.AggregateRoots.ProductAggregate;
@@ -9,7 +10,7 @@ public class CategoryId : ValueObject
     {
         if (value == Guid.Empty)
         {
-            throw new BadRequestException("CategoryId is an empty guid",
+            throw new ProductValidationException("CategoryId is an empty guid",
                 new ArgumentException(null, nameof(value)));
         }
         

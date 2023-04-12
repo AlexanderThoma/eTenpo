@@ -2,9 +2,9 @@ using MediatR;
 
 namespace eTenpo.Product.Domain.Common;
 
-public abstract class DomainEvent : INotification
+public abstract record DomainEvent : INotification
 {
-    public Guid EventId { get; set; } = Guid.NewGuid();
+    public Guid EventId { get; } = Guid.NewGuid();
 
-    public DateTime OccurredOn { get; set; } = DateTime.UtcNow;
+    public DateTime OccurredOn { get; } = DateTime.UtcNow;
 }

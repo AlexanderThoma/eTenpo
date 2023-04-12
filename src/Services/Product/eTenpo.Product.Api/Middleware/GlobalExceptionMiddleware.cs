@@ -1,7 +1,6 @@
-﻿using eTenpo.Product.Domain.Exceptions.Base;
+﻿using eTenpo.Product.Domain.Exceptions;
 using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
-using Newtonsoft.Json;
 
 namespace eTenpo.Product.Api.Middleware;
 
@@ -31,41 +30,44 @@ public class GlobalExceptionMiddleware : IMiddleware
 
     private async Task HandleException(HttpContext context, Exception exception)
     {
-        var response = context.Response;
-        context.Response.ContentType = "application/json";
-
-        var problemDetails = CreateProblemDetails(context, exception);
+        var problemDetails = CreateProblemDetails(context.Request.Path, exception);
 
         if (environment.IsDevelopment())
         {
             problemDetails.Extensions.Add("stackTrace", exception);
         }
-
-        var json = JsonConvert.SerializeObject(problemDetails);
-
-        await response.WriteAsync(json);
+        
+        await context.Response.WriteAsJsonAsync(problemDetails);
     }
 
-    private ProblemDetails CreateProblemDetails(HttpContext context, Exception exception)
+    private ProblemDetails CreateProblemDetails(PathString requestPath, Exception exception)
     {
         var problemDetails = exception switch
         {
             ValidationException ex => new ValidationProblemDetails(ex.Errors.GroupBy(x => x.PropertyName)
                 .ToDictionary(x => x.Key, failures => failures.Select(y => y.ErrorMessage).ToArray()))
             {
-                Title = "One or more validation errors occurred",
+                Title = "One or more validation errors occurred in the pipeline",
                 Status = StatusCodes.Status400BadRequest,
                 Type = nameof(ValidationException),
                 Detail = ex.Message,
-                Instance = context.Request.Path
+                Instance = requestPath
             },
-            ProductDomainException ex => new ProblemDetails
+            ProductValidationException ex => new ProblemDetails
             {
-                Status = StatusCodes.Status400BadRequest,
-                Type = nameof(ProductDomainException),
-                Title = "An error occurred in the product domain",
+                Status = StatusCodes.Status422UnprocessableEntity,
+                Type = nameof(ProductValidationException),
+                Title = "An validation error occurred in the product domain",
                 Detail = ex.Message,
-                Instance = context.Request.Path
+                Instance = requestPath
+            },
+            EntityNotFoundException ex => new ProblemDetails
+            {
+                Status = StatusCodes.Status404NotFound,
+                Type = nameof(EntityNotFoundException),
+                Title = "The requested entity could not be found",
+                Detail = ex.Message,
+                Instance = requestPath
             },
             _ => new ProblemDetails
             {
@@ -73,9 +75,10 @@ public class GlobalExceptionMiddleware : IMiddleware
                 Type = "Server error",
                 Title = "An error occurred while processing your request",
                 Detail = "An internal server error has occurred. See logs for more details",
-                Instance = context.Request.Path
+                Instance = requestPath
             }
         };
+        
         return problemDetails;
     }
 }

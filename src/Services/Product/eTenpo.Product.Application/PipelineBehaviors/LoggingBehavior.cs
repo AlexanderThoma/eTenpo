@@ -1,23 +1,30 @@
 using MediatR;
+using Microsoft.Extensions.Logging;
 
 namespace eTenpo.Product.Application.PipelineBehaviors;
 
 public class LoggingBehavior<TRequest, TResponse> : IPipelineBehavior<TRequest, TResponse>
     where TRequest : class, IRequest<TResponse>
 {
-    public LoggingBehavior()
+    private readonly ILogger<LoggingBehavior<TRequest, TResponse>> logger;
+
+    public LoggingBehavior(ILogger<LoggingBehavior<TRequest, TResponse>> logger)
     {
-        
+        this.logger = logger;
     }
     
     public async Task<TResponse> Handle(TRequest request, RequestHandlerDelegate<TResponse> next, CancellationToken cancellationToken)
     {
-        // todo: log stuff
+        this.logger.LogInformation("Handling request {@RequestName}, {@DateTimeUtc}", 
+            typeof(TRequest).Name,
+            DateTime.UtcNow);
 
         var result = await next();
-        
-        // todo: log stuff again
 
+        this.logger.LogInformation("Completed request {@RequestName}, {@DateTimeUtc}", 
+            typeof(TRequest).Name,
+            DateTime.UtcNow);
+        
         return result;
     }
 }
