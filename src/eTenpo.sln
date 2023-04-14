@@ -5,15 +5,15 @@ VisualStudioVersion = 17.0.31903.59
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Services", "Services", "{8FCF119D-D426-4F36-AC11-66023B5BAE8A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "eTenpo.Product.Api", "Services\ProductService\eTenpo.Product.Api\eTenpo.Product.Api.csproj", "{2A9DFFEC-BE3E-458B-94C8-D994CCF3BA84}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "eTenpo.Product.Api", "Services\Product\eTenpo.Product.Api\eTenpo.Product.Api.csproj", "{2A9DFFEC-BE3E-458B-94C8-D994CCF3BA84}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "eTenpo.Product.Infrastructure", "Services\ProductService\eTenpo.Product.Infrastructure\eTenpo.Product.Infrastructure.csproj", "{1DB50537-981F-4B2B-85E7-633F7743284A}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "eTenpo.Product.Infrastructure", "Services\Product\eTenpo.Product.Infrastructure\eTenpo.Product.Infrastructure.csproj", "{1DB50537-981F-4B2B-85E7-633F7743284A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "eTenpo.Product.Domain", "Services\ProductService\eTenpo.Product.Domain\eTenpo.Product.Domain.csproj", "{1419ABDF-D155-4020-B2A4-23AC67AF6E10}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "eTenpo.Product.Domain", "Services\Product\eTenpo.Product.Domain\eTenpo.Product.Domain.csproj", "{1419ABDF-D155-4020-B2A4-23AC67AF6E10}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "eTenpo.Product.Application", "Services\ProductService\eTenpo.Product.Application\eTenpo.Product.Application.csproj", "{C2881784-F181-4BFC-8D5A-7AF2C8913025}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "eTenpo.Product.Application", "Services\Product\eTenpo.Product.Application\eTenpo.Product.Application.csproj", "{C2881784-F181-4BFC-8D5A-7AF2C8913025}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ProductService", "ProductService", "{26C5EE5F-3DF6-42ED-8051-B3A40EC26E80}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Product", "Product", "{26C5EE5F-3DF6-42ED-8051-B3A40EC26E80}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
