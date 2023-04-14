@@ -1,5 +1,7 @@
 using Asp.Versioning;
+using Asp.Versioning.ApiExplorer;
 using eTenpo.Product.Api.Middleware;
+using eTenpo.Product.Api.Swagger;
 using eTenpo.Product.Application;
 using eTenpo.Product.Infrastructure;
 using Serilog;
@@ -33,6 +35,8 @@ builder.Services.AddApiVersioning(options =>
     options.DefaultApiVersion = new ApiVersion(1, 0);
 });
 
+builder.Services.ConfigureOptions<ConfigureSwaggerOptions>();
+
 var app = builder.Build();
 
 app.UseMiddleware<GlobalExceptionMiddleware>();
@@ -45,8 +49,17 @@ app.UseCors(x => x
 
 if (app.Environment.IsDevelopment())
 {
+    var apiVersionDescriptionProvider = app.Services.GetRequiredService<IApiVersionDescriptionProvider>();
+    
     app.UseSwagger();
-    app.UseSwaggerUI();
+    app.UseSwaggerUI(options =>
+    {
+        foreach (var description in apiVersionDescriptionProvider.ApiVersionDescriptions.Reverse())
+        {
+            options.SwaggerEndpoint($"/swagger/{description.GroupName}/swagger.json",
+                description.GroupName.ToUpperInvariant());
+        }
+    });
 }
 
 app.UseSerilogRequestLogging();

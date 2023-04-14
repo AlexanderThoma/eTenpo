@@ -1,4 +1,3 @@
-using Asp.Versioning;
 using AutoMapper;
 using eTenpo.Product.Api.Dtos.Product;
 using eTenpo.Product.Application.ProductFeature.Create;
@@ -10,7 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace eTenpo.Product.Api.Controllers;
 // TODO: Add Logging
-[ApiVersion("1.0")]
+[Asp.Versioning.ApiVersion("1.0")]
 public class ProductsController : BaseApiController
 {
     private readonly IMediator mediator;
