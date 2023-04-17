@@ -17,6 +17,8 @@ builder.Logging.AddSerilog(logger);
 
 builder.Services.AddTransient<GlobalExceptionMiddleware>();
 
+// TODO: use marker interfaces to register services 'on the fly', e.g. ITransient, IScoped, ISingleton, with "Scrutor"
+// TODO: maybe it's worth to see decorator functionality of Scrutor for some services
 // add dependencies from other layers
 builder.Services
     .AddInfrastructure(builder.Configuration["ConnectionStrings:SqlServer"]!)
