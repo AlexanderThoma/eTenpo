@@ -1,7 +1,7 @@
 ﻿using eTenpo.Product.Domain.Common;
 using Microsoft.EntityFrameworkCore;
 
-namespace eTenpo.Product.Infrastructure.Specifications;
+namespace eTenpo.Product.Infrastructure.Specifications.Base;
 
 /// <summary>
 /// Naive specification evaluator (does not include all EF core functionality, e.g. thenInclude)

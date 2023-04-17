@@ -3,11 +3,11 @@ using MediatR;
 
 namespace eTenpo.Product.Application.ProductFeature.Delete;
 
-public class DeleteProductCommandHandler : IRequestHandler<DeleteProductCommand, DeleteProductResponse>
+public class DeleteProductHandler : IRequestHandler<DeleteProductCommand, DeleteProductResponse>
 {
     private readonly IProductRepository repo;
 
-    public DeleteProductCommandHandler(IProductRepository repo)
+    public DeleteProductHandler(IProductRepository repo)
     {
         this.repo = repo;
     }

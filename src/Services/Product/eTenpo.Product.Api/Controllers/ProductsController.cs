@@ -3,6 +3,8 @@ using eTenpo.Product.Api.Dtos.Product;
 using eTenpo.Product.Application.ProductFeature.Create;
 using eTenpo.Product.Application.ProductFeature.Delete;
 using eTenpo.Product.Application.ProductFeature.Read;
+using eTenpo.Product.Application.ProductFeature.Read.All;
+using eTenpo.Product.Application.ProductFeature.Read.Single;
 using eTenpo.Product.Application.ProductFeature.Update;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;

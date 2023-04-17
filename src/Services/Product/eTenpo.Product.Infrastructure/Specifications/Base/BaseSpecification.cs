@@ -1,7 +1,7 @@
 ﻿using System.Linq.Expressions;
 using eTenpo.Product.Domain.Common;
 
-namespace eTenpo.Product.Infrastructure.Specifications;
+namespace eTenpo.Product.Infrastructure.Specifications.Base;
 
 public abstract class BaseSpecification<T> where T : AggregateRoot
 {

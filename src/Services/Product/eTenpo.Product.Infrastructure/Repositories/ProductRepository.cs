@@ -19,4 +19,14 @@ public class ProductRepository : BaseRepository<Domain.AggregateRoots.ProductAgg
         CancellationToken cancellationToken = default) =>
         await this.ApplySpecification(new ProductsByCategoryIdSpec(categoryId))
             .ToListAsync(cancellationToken);
+    
+    public async Task<List<Domain.AggregateRoots.ProductAggregate.Product>> GetAllWithCategory(CancellationToken cancellationToken = default) =>
+        await this.ApplySpecification(new ProductsWithCategorySpec())
+            .ToListAsync(cancellationToken);
+
+    public async Task<Guid> Add(Domain.AggregateRoots.ProductAggregate.Product product) => (await this.DbSet.AddAsync(product)).Entity.Id;
+    
+    public void Delete(Domain.AggregateRoots.ProductAggregate.Product product) => this.DbSet.Remove(product);
+    
+    // Update not necessary -> to be done via domain model (tracked by EF core), then just use saveChanges
 }

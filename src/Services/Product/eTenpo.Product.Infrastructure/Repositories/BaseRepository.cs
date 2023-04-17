@@ -1,5 +1,5 @@
 ﻿using eTenpo.Product.Domain.Common;
-using eTenpo.Product.Infrastructure.Specifications;
+using eTenpo.Product.Infrastructure.Specifications.Base;
 using Microsoft.EntityFrameworkCore;
 
 namespace eTenpo.Product.Infrastructure.Repositories;

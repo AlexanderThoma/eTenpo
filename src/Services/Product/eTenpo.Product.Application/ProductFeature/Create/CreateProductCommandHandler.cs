@@ -1,3 +1,4 @@
+using eTenpo.Product.Domain.AggregateRoots.ProductAggregate;
 using eTenpo.Product.Domain.Contracts;
 using MediatR;
 
@@ -14,6 +15,15 @@ public class CreateProductCommandHandler : IRequestHandler<CreateProductCommand,
     
     public async Task<CreateProductCommandResponse> Handle(CreateProductCommand request, CancellationToken cancellationToken)
     {
-        throw new NotImplementedException();
+        // create in repo
+        var product = new Domain.AggregateRoots.ProductAggregate.Product(
+            new Name(request.Name),
+            new Price(request.Price),
+            new Description(request.Description),
+            new CategoryId(request.CategoryId));
+        
+        
+        
+        return new CreateProductCommandResponse(Guid.NewGuid());
     }
 }

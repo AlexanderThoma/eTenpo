@@ -1,4 +1,6 @@
-﻿namespace eTenpo.Product.Infrastructure.Specifications;
+﻿using eTenpo.Product.Infrastructure.Specifications.Base;
+
+namespace eTenpo.Product.Infrastructure.Specifications;
 
 public class ProductByIdWithCategorySpec : BaseSpecification<Domain.AggregateRoots.ProductAggregate.Product>
 {
