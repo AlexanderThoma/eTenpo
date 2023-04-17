@@ -1,21 +1,22 @@
 using eTenpo.Product.Domain.Contracts;
+using eTenpo.Product.Infrastructure.Specifications;
 using Microsoft.EntityFrameworkCore;
 
 namespace eTenpo.Product.Infrastructure.Repositories;
 
-// TODO: use specification pattern
-public class ProductRepository : IProductRepository
+public class ProductRepository : BaseRepository<Domain.AggregateRoots.ProductAggregate.Product>, IProductRepository
 {
-    private readonly DbSet<Domain.AggregateRoots.ProductAggregate.Product> productSet;
-
-    public ProductRepository(ApplicationDbContext dbContext)
+    public ProductRepository(ApplicationDbContext dbContext) : base(dbContext)
     {
-        this.productSet = dbContext.Set<Domain.AggregateRoots.ProductAggregate.Product>();
     }
 
-    public async Task<Domain.AggregateRoots.ProductAggregate.Product?> GetByIdWithCategory(Guid id,
-        CancellationToken cancellationToken = default)
-    {
-        return await this.productSet.SingleOrDefaultAsync(x => x.Id == id, cancellationToken);
-    }
+    public async Task<Domain.AggregateRoots.ProductAggregate.Product?> GetByIdWithCategory(Guid productId,
+        CancellationToken cancellationToken = default) =>
+        await this.ApplySpecification(new ProductByIdWithCategorySpec(productId))
+        .SingleOrDefaultAsync(cancellationToken);
+    
+    public async Task<List<Domain.AggregateRoots.ProductAggregate.Product>> GetAllByCategoryId(Guid categoryId,
+        CancellationToken cancellationToken = default) =>
+        await this.ApplySpecification(new ProductsByCategoryIdSpec(categoryId))
+            .ToListAsync(cancellationToken);
 }

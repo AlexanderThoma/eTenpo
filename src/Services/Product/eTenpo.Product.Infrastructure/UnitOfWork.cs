@@ -11,8 +11,11 @@ public class UnitOfWork : IUnitOfWork
         this.dbContext = dbContext;
     }
 
-    public async Task SaveChangesAsync(CancellationToken cancellationToken)
+    public async Task SaveChangesAsync(CancellationToken cancellationToken = default)
     {
+        // TODO: add outbox pattern
+        // TODO: add auditMessages (IAuditable), CreatedBy/CreatedOn
+        
         _ = await this.dbContext.SaveChangesAsync(cancellationToken);
     }
 }

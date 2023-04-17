@@ -1,7 +1,7 @@
+using eTenpo.Product.Domain.AggregateRoots.CategoryAggregate;
 using eTenpo.Product.Domain.Common;
 using eTenpo.Product.Domain.DomainEvents;
 using eTenpo.Product.Domain.Exceptions;
-using eTenpo.Product.Domain.Exceptions.Base;
 
 namespace eTenpo.Product.Domain.AggregateRoots.ProductAggregate;
 
@@ -21,6 +21,9 @@ public class Product : AggregateRoot
     public Description Description { get; private set; }
     public Stock AvailableStock { get; private set; }
     public CategoryId CategoryId { get; private set; }
+    
+    // used as navigation property
+    public Category Category { get; }
 
     public void UpdateName(Name newName)
     {
