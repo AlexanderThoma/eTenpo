@@ -11,7 +11,5 @@ public class ProductMappingProfile : Profile
     {
         CreateMap<CreateProductDto, CreateProductCommand>();
         CreateMap<UpdateProductDto, UpdateProductCommand>();
-        CreateMap<Domain.AggregateRoots.ProductAggregate.Product, UpdateProductResponse>();
-        CreateMap<>();
     }
 }

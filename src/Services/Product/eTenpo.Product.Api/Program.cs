@@ -28,7 +28,7 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-builder.Services.add
+builder.Services.AddAutoMapper(typeof(Program).Assembly);
 
 builder.Services.AddApiVersioning(options =>
 {
