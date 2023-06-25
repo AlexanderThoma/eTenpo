@@ -27,6 +27,11 @@ public class Product : AggregateRoot
     // used as navigation property
     public Category Category { get; }
 
+    public void Delete()
+    {
+        this.AddDomainEvent(new ProductDeletedEvent(this.Id));
+    }
+    
     public void UpdateName(Name newName)
     {
         if (this.Name == newName)

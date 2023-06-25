@@ -5,15 +5,23 @@ namespace eTenpo.Product.Application.ProductFeature.Delete;
 
 public class DeleteProductHandler : IRequestHandler<DeleteProductCommand, DeleteProductResponse>
 {
-    private readonly IProductRepository repo;
+    private readonly IProductRepository productRepository;
 
-    public DeleteProductHandler(IProductRepository repo)
+    public DeleteProductHandler(IProductRepository productRepository)
     {
-        this.repo = repo;
+        this.productRepository = productRepository;
     }
     
     public async Task<DeleteProductResponse> Handle(DeleteProductCommand request, CancellationToken cancellationToken)
     {
-        throw new NotImplementedException();
+        var product = await this.productRepository.GetById(request.Id);
+        
+        // mark as deleted in changeTracker
+        this.productRepository.Delete(product);
+        
+        // generate domain event
+        product.Delete();
+
+        return new DeleteProductResponse(request.Id);
     }
 }
