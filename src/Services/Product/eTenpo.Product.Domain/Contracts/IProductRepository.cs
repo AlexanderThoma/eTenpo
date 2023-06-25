@@ -11,4 +11,10 @@ public interface IProductRepository : IRepository<AggregateRoots.ProductAggregat
     Task<List<Domain.AggregateRoots.ProductAggregate.Product>> GetAllWithCategory(CancellationToken cancellationToken = default);
     Task<Guid> Add(Domain.AggregateRoots.ProductAggregate.Product product);
     void Delete(AggregateRoots.ProductAggregate.Product product);
+
+    Task<Domain.AggregateRoots.ProductAggregate.Product> GetById(Guid productId,
+        CancellationToken cancellationToken = default);
+
+    Task<Domain.AggregateRoots.ProductAggregate.Product?> GetByName(string name,
+        CancellationToken cancellationToken = default);
 }

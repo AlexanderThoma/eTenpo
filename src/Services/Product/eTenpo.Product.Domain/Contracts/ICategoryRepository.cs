@@ -5,4 +5,5 @@ namespace eTenpo.Product.Domain.Contracts;
 
 public interface ICategoryRepository : IRepository<Category>
 {
+    Task<bool> Exists(Guid id);
 }

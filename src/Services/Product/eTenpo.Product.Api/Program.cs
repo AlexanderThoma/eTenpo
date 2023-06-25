@@ -1,6 +1,7 @@
 using Asp.Versioning;
 using Asp.Versioning.ApiExplorer;
 using eTenpo.Product.Api.Middleware;
+using eTenpo.Product.Api.Services;
 using eTenpo.Product.Api.Swagger;
 using eTenpo.Product.Application;
 using eTenpo.Product.Infrastructure;
@@ -28,7 +29,7 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-builder.Services.add
+builder.Services.AddQuartzServices();
 
 builder.Services.AddApiVersioning(options =>
 {

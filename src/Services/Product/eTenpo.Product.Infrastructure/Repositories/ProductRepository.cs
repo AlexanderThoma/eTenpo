@@ -10,6 +10,16 @@ public class ProductRepository : BaseRepository<Domain.AggregateRoots.ProductAgg
     {
     }
 
+    public async Task<Domain.AggregateRoots.ProductAggregate.Product?> GetByName(string name,
+        CancellationToken cancellationToken = default) =>
+        await this.ApplySpecification(new ProductByNameSpec(name))
+            .SingleOrDefaultAsync(cancellationToken);
+    
+    public async Task<Domain.AggregateRoots.ProductAggregate.Product> GetById(Guid productId,
+        CancellationToken cancellationToken = default) =>
+        await this.ApplySpecification(new ProductByIdSpec(productId))
+            .SingleAsync(cancellationToken);
+    
     public async Task<Domain.AggregateRoots.ProductAggregate.Product?> GetByIdWithCategory(Guid productId,
         CancellationToken cancellationToken = default) =>
         await this.ApplySpecification(new ProductByIdWithCategorySpec(productId))

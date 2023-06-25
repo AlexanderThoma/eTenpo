@@ -42,6 +42,11 @@ public static class SpecificationEvaluator
         {
             inputQueryable = inputQueryable.AsSplitQuery();
         }
+
+        if (specification.AsNoTracking)
+        {
+            inputQueryable = inputQueryable.AsNoTracking();
+        }
         
         return inputQueryable;
     }

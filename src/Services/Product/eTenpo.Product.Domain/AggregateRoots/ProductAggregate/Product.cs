@@ -14,6 +14,8 @@ public class Product : AggregateRoot
         this.Description = description;
         this.AvailableStock = new Stock();
         this.CategoryId = categoryId;
+        
+        this.AddDomainEvent(new ProductCreatedEvent(this));
     }
 
     public Name Name { get; private set; }
@@ -27,31 +29,37 @@ public class Product : AggregateRoot
 
     public void UpdateName(Name newName)
     {
+        if (this.Name == newName)
+        {
+            return;
+        }
+        
         this.Name = newName;
     }
     
     public void UpdateDescription(Description newDescription)
     {
+        if (this.Description == newDescription)
+        {
+            return;
+        }
+        
         this.Description = newDescription;
     }
     
     public void UpdatePrice(Price newPrice)
     {
-        this.Price = newPrice;
+        if (this.Price == newPrice)
+        {
+            return;
+        }
         
+        this.Price = newPrice;
         this.AddDomainEvent(new ProductPriceUpdatedEvent(this.Id, this.Price.Value, newPrice.Value));
     }
-
-    // maybe skip for less complexity (event must be triggered if filtering by category
-    // is done in outside service (eventual consistency must be considered)
+    
     public void ChangeCategory(CategoryId id)
     {
-        // TODO: check for valid category
-        // if ()
-        // {
-        //     throw new ProductDomainException($"This product is already in category \"{id}\"");
-        // }
-
         this.CategoryId = id;
     }
 
@@ -61,8 +69,11 @@ public class Product : AggregateRoot
         {
             throw new ProductValidationException("Amount must not be less or equal than zero");
         }
-        
+
+        var oldStock = this.AvailableStock.Value;
         this.AvailableStock = this.AvailableStock.Add(amount);
+        
+        this.AddDomainEvent(new StockAddedEvent(this.Id, oldStock, this.AvailableStock.Value));
     }
     
     public void RemoveStock(int amount)
@@ -72,6 +83,9 @@ public class Product : AggregateRoot
             throw new ProductValidationException("Not enough stock available");
         }
         
+        var oldStock = this.AvailableStock.Value;
         this.AvailableStock = this.AvailableStock.Remove(amount);
+        
+        this.AddDomainEvent(new StockAddedEvent(this.Id, oldStock, this.AvailableStock.Value));
     }
 }

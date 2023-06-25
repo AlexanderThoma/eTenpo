@@ -6,6 +6,7 @@ public class SampleHealthCheck : IHealthCheck
 {
     public Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = new CancellationToken())
     {
+        // TODO: health-check
         throw new NotImplementedException();
     }
 }

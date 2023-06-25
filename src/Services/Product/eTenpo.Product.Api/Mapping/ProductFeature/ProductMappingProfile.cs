@@ -7,11 +7,11 @@ namespace eTenpo.Product.Api.Mapping.ProductFeature;
 
 public class ProductMappingProfile : Profile
 {
+    // TODO: mapping profiles
     public ProductMappingProfile()
     {
         CreateMap<CreateProductDto, CreateProductCommand>();
         CreateMap<UpdateProductDto, UpdateProductCommand>();
         CreateMap<Domain.AggregateRoots.ProductAggregate.Product, UpdateProductResponse>();
-        CreateMap<>();
     }
 }

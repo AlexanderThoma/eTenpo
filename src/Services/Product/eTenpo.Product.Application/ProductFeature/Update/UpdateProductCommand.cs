@@ -7,7 +7,6 @@ public record UpdateProductCommand(
     string Name,
     decimal Price,
     string Description,
-    int AvailableStock,
     Guid CategoryId) : IRequest<UpdateProductResponse>
 {
     public Guid Id { get; set; } = Id;

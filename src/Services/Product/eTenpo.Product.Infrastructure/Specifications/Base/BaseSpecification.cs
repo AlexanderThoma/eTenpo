@@ -9,6 +9,8 @@ public abstract class BaseSpecification<T> where T : AggregateRoot
 
     public bool IsSplitQuery { get; private set; } = false;
     
+    public bool AsNoTracking { get; private set; } = false;
+    
     public Expression<Func<T, bool>>? FilterCondition { get; init; }
     
     public List<Expression<Func<T, object>>> Includes { get; } = new();
@@ -28,6 +30,9 @@ public abstract class BaseSpecification<T> where T : AggregateRoot
     
     protected void SetGroupBy(Expression<Func<T, object>> groupBy) =>
         this.GroupBy = groupBy;
+    
+    protected void SetAsNoTracking() =>
+        this.AsNoTracking = true;
     
     protected void SetSplitQueryTrue() => this.IsSplitQuery = true;
 }
