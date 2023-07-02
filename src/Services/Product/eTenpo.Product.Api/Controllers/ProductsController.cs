@@ -26,9 +26,9 @@ public class ProductsController : BaseApiController
     [HttpPost]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public async Task<ActionResult<CreateProductCommandResponse>> Create([FromBody] CreateProductDto dto)
+    public async Task<ActionResult<CreateProductCommandResponse>> Create([FromBody] CreateProductRequest request)
     {
-        var command = this.mapper.Map<CreateProductCommand>(dto);
+        var command = this.mapper.Map<CreateProductCommand>(request);
         
         var response = await this.mediator.Send(command);
 
@@ -54,9 +54,9 @@ public class ProductsController : BaseApiController
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<ActionResult<UpdateProductResponse>> Update(Guid id, [FromBody] UpdateProductDto dto)
+    public async Task<ActionResult<UpdateProductResponse>> Update(Guid id, [FromBody] UpdateProductRequest request)
     {
-        var command = this.mapper.Map<UpdateProductCommand>(dto, options => options.AfterMap((src, dest) => dest.Id = id));
+        var command = this.mapper.Map<UpdateProductCommand>(request, options => options.AfterMap((src, dest) => dest.Id = id));
 
         var response = await this.mediator.Send(command);
 

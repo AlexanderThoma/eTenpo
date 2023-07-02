@@ -1,6 +1,6 @@
 ﻿namespace eTenpo.Product.Api.Dtos.Product;
 
-public abstract class ProductBaseDto
+public abstract class ProductBaseRequest
 {
     public string Name { get; set; }
     

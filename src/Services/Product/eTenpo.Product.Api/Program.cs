@@ -1,10 +1,12 @@
 using Asp.Versioning;
 using Asp.Versioning.ApiExplorer;
+using eTenpo.Product.Api.HealthChecks;
 using eTenpo.Product.Api.Middleware;
 using eTenpo.Product.Api.Services;
 using eTenpo.Product.Api.Swagger;
 using eTenpo.Product.Application;
 using eTenpo.Product.Infrastructure;
+using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -17,6 +19,8 @@ builder.Logging.ClearProviders();
 builder.Logging.AddSerilog(logger);
 
 builder.Services.AddTransient<GlobalExceptionMiddleware>();
+
+builder.Services.AddCustomHealthChecks(builder.Configuration);
 
 // TODO: use marker interfaces to register services 'on the fly', e.g. ITransient, IScoped, ISingleton, with "Scrutor"
 // TODO: maybe it's worth to see decorator functionality of Scrutor for some services
@@ -73,5 +77,34 @@ app.UseSerilogRequestLogging();
 app.UseAuthorization();
 
 app.MapControllers();
+
+// TODO: security, add requireCors and requireAuthorization, consider deactivation of caching
+
+// health check for dependencies, 
+app.MapHealthChecks("/healthz/startup", new HealthCheckOptions
+{
+    Predicate = r => r.Tags.Contains("startup")
+});
+
+// check if app is alive, therefore simple return of true is sufficient
+// if not alive -> Kubernetes will recreate the pod
+app.MapHealthChecks("/healthz/liveness", new HealthCheckOptions
+{
+    // reference health check by name
+    Predicate = r => r.Name.Contains("self")
+});
+
+// if fail -> Kubernetes will leave pod running but won't send traffic
+// actually unnecessary, because same as liveness-check (here for completeness)
+app.MapHealthChecks("/healthz/readiness", new HealthCheckOptions
+{
+    // reference health check by name
+    Predicate = r => r.Name.Contains("self")
+});
+
+app.MapHealthChecksUI(options =>
+{
+    options.ApiPath = "healthchecks-ui";
+});
 
 app.Run();

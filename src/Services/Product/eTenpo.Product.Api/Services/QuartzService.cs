@@ -5,6 +5,7 @@ namespace eTenpo.Product.Api.Services;
 
 public static class QuartzService
 {
+    // Background job inside the same container (basically the same as Hangfire)
     public static IServiceCollection AddQuartzServices(this IServiceCollection services)
     {
         services.AddQuartz(configure =>
