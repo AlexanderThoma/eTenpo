@@ -13,7 +13,7 @@ public static class DependencyInjection
 
         services.AddMediatR(config =>
         {
-            // only registers handlers
+            // register handlers
             config.RegisterServicesFromAssembly(appAssembly);
             
             // add pipeline behavior separately, !! order represents execution order in pipeline !!

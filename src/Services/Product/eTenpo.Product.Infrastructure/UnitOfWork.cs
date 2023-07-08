@@ -16,7 +16,6 @@ public class UnitOfWork : IUnitOfWork
 
     public async Task SaveChangesAsync(CancellationToken cancellationToken = default)
     {
-        // TODO: add outbox pattern
         // TODO: add auditMessages (IAuditable), CreatedBy/CreatedOn
 
         // alternative outbox pattern: https://www.kamilgrzybek.com/blog/posts/the-outbox-pattern

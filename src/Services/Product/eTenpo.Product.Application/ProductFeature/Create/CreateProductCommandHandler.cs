@@ -9,11 +9,13 @@ public class CreateProductCommandHandler : ICommandHandler<CreateProductCommand,
 {
     private readonly IProductRepository repository;
     private readonly ICategoryRepository categoryRepository;
+    private readonly IUnitOfWork unitOfWork;
 
-    public CreateProductCommandHandler(IProductRepository repository, ICategoryRepository categoryRepository)
+    public CreateProductCommandHandler(IProductRepository repository, ICategoryRepository categoryRepository, IUnitOfWork unitOfWork)
     {
         this.repository = repository;
         this.categoryRepository = categoryRepository;
+        this.unitOfWork = unitOfWork;
     }
     
     public async Task<CreateProductCommandResponse> Handle(CreateProductCommand request, CancellationToken cancellationToken)
@@ -27,15 +29,17 @@ public class CreateProductCommandHandler : ICommandHandler<CreateProductCommand,
         
         // create in repo
         var product = new Domain.AggregateRoots.ProductAggregate.Product(
-            new Name(request.Name),
-            new Price(request.Price),
-            new Description(request.Description),
-            new CategoryId(request.CategoryId));
+             request.Name,
+             request.Price,
+             request.Description,
+             request.CategoryId);
 
         var id = await this.repository.Add(product);
         
         // createdEvent called in ctor of aggregate
 
+        await this.unitOfWork.SaveChangesAsync(cancellationToken);
+        
         return new CreateProductCommandResponse(id);
     }
 }

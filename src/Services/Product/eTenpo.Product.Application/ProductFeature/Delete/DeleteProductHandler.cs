@@ -6,10 +6,12 @@ namespace eTenpo.Product.Application.ProductFeature.Delete;
 public class DeleteProductHandler : ICommandHandler<DeleteProductCommand>
 {
     private readonly IProductRepository productRepository;
+    private readonly IUnitOfWork unitOfWork;
 
-    public DeleteProductHandler(IProductRepository productRepository)
+    public DeleteProductHandler(IProductRepository productRepository, IUnitOfWork unitOfWork)
     {
         this.productRepository = productRepository;
+        this.unitOfWork = unitOfWork;
     }
     
     public async Task Handle(DeleteProductCommand request, CancellationToken cancellationToken)
@@ -21,5 +23,7 @@ public class DeleteProductHandler : ICommandHandler<DeleteProductCommand>
         
         // generate domain event
         product.Delete();
+        
+        await this.unitOfWork.SaveChangesAsync(cancellationToken);
     }
 }

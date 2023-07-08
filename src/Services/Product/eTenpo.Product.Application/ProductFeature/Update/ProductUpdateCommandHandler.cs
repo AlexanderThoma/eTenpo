@@ -2,7 +2,6 @@ using eTenpo.Product.Application.CommandQueryAbstractions;
 using eTenpo.Product.Domain.AggregateRoots.ProductAggregate;
 using eTenpo.Product.Domain.Contracts;
 using eTenpo.Product.Domain.Exceptions;
-using MediatR;
 
 namespace eTenpo.Product.Application.ProductFeature.Update;
 
@@ -10,11 +9,13 @@ public class ProductUpdateCommandHandler : ICommandHandler<UpdateProductCommand,
 {
     private readonly IProductRepository productRepository;
     private readonly ICategoryRepository categoryRepository;
+    private readonly IUnitOfWork unitOfWork;
 
-    public ProductUpdateCommandHandler(IProductRepository productRepository, ICategoryRepository categoryRepository)
+    public ProductUpdateCommandHandler(IProductRepository productRepository, ICategoryRepository categoryRepository, IUnitOfWork unitOfWork)
     {
         this.productRepository = productRepository;
         this.categoryRepository = categoryRepository;
+        this.unitOfWork = unitOfWork;
     }
     
     public async Task<UpdateProductResponse> Handle(UpdateProductCommand request, CancellationToken cancellationToken)
@@ -42,6 +43,8 @@ public class ProductUpdateCommandHandler : ICommandHandler<UpdateProductCommand,
         product.UpdatePrice(new Price(request.Price));
         product.ChangeCategory(new CategoryId(request.CategoryId));
 
+        await this.unitOfWork.SaveChangesAsync(cancellationToken);
+        
         return new UpdateProductResponse(product.Id);
     }
 }

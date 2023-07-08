@@ -7,13 +7,14 @@ namespace eTenpo.Product.Domain.AggregateRoots.ProductAggregate;
 
 public class Product : AggregateRoot
 {
-    public Product(Name name, Price price, Description description, CategoryId categoryId)
+    public Product(string name, decimal price, string description, Guid categoryId)
     {
-        this.Name = name;
-        this.Price = price;
-        this.Description = description;
+        this.Name = new Name(name);
+        this.Price = new Price(price);
+        this.Description = new Description(description);
         this.AvailableStock = new Stock();
-        this.CategoryId = categoryId;
+        this.CategoryId = new CategoryId(categoryId);
+        this.Category = null;
         
         this.AddDomainEvent(new ProductCreatedEvent(this));
     }
@@ -25,7 +26,7 @@ public class Product : AggregateRoot
     public CategoryId CategoryId { get; private set; }
     
     // used as navigation property
-    public Category Category { get; }
+    public Category? Category { get; }
 
     public void Delete()
     {
