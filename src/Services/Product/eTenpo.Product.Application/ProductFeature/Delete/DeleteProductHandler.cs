@@ -1,9 +1,9 @@
+using eTenpo.Product.Application.CommandQueryAbstractions;
 using eTenpo.Product.Domain.Contracts;
-using MediatR;
 
 namespace eTenpo.Product.Application.ProductFeature.Delete;
 
-public class DeleteProductHandler : IRequestHandler<DeleteProductCommand>
+public class DeleteProductHandler : ICommandHandler<DeleteProductCommand>
 {
     private readonly IProductRepository productRepository;
 

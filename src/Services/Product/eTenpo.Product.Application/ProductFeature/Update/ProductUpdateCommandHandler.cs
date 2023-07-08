@@ -1,3 +1,4 @@
+using eTenpo.Product.Application.CommandQueryAbstractions;
 using eTenpo.Product.Domain.AggregateRoots.ProductAggregate;
 using eTenpo.Product.Domain.Contracts;
 using eTenpo.Product.Domain.Exceptions;
@@ -5,7 +6,7 @@ using MediatR;
 
 namespace eTenpo.Product.Application.ProductFeature.Update;
 
-public class ProductUpdateCommandHandler : IRequestHandler<UpdateProductCommand, UpdateProductResponse>
+public class ProductUpdateCommandHandler : ICommandHandler<UpdateProductCommand, UpdateProductResponse>
 {
     private readonly IProductRepository productRepository;
     private readonly ICategoryRepository categoryRepository;

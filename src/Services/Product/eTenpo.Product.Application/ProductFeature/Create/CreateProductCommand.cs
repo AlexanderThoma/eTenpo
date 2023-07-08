@@ -1,4 +1,4 @@
-using MediatR;
+using eTenpo.Product.Application.CommandQueryAbstractions;
 
 namespace eTenpo.Product.Application.ProductFeature.Create;
 
@@ -7,4 +7,4 @@ public record CreateProductCommand(
     decimal Price,
     string Description,
     int AvailableStock,
-    Guid CategoryId) : IRequest<CreateProductCommandResponse>;
+    Guid CategoryId) : ICommand<CreateProductCommandResponse>;

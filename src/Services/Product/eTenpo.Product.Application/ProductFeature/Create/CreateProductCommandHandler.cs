@@ -1,11 +1,11 @@
+using eTenpo.Product.Application.CommandQueryAbstractions;
 using eTenpo.Product.Domain.AggregateRoots.ProductAggregate;
 using eTenpo.Product.Domain.Contracts;
 using eTenpo.Product.Domain.Exceptions;
-using MediatR;
 
 namespace eTenpo.Product.Application.ProductFeature.Create;
 
-public class CreateProductCommandHandler : IRequestHandler<CreateProductCommand, CreateProductCommandResponse>
+public class CreateProductCommandHandler : ICommandHandler<CreateProductCommand, CreateProductCommandResponse>
 {
     private readonly IProductRepository repository;
     private readonly ICategoryRepository categoryRepository;

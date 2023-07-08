@@ -16,7 +16,7 @@ public static class DependencyInjection
             // only registers handlers
             config.RegisterServicesFromAssembly(appAssembly);
             
-            // add pipeline behavior separately, !! order is important !!
+            // add pipeline behavior separately, !! order represents execution order in pipeline !!
             config.AddBehavior(typeof(IPipelineBehavior<,>), typeof(LoggingBehavior<,>), ServiceLifetime.Scoped);
             config.AddBehavior(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>), ServiceLifetime.Transient);
         });

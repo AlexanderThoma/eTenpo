@@ -1,3 +1,4 @@
+using eTenpo.Product.Application.CommandQueryAbstractions;
 using MediatR;
 
 namespace eTenpo.Product.Application.ProductFeature.Update;
@@ -7,7 +8,7 @@ public record UpdateProductCommand(
     string Name,
     decimal Price,
     string Description,
-    Guid CategoryId) : IRequest<UpdateProductResponse>
+    Guid CategoryId) : ICommand<UpdateProductResponse>
 {
     // used for mapping the id in the controller
     public Guid Id { get; set; } = Id;
