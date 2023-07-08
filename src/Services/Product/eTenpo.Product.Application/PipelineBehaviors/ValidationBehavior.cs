@@ -1,4 +1,5 @@
 using FluentValidation;
+using FluentValidation.Results;
 using MediatR;
 
 namespace eTenpo.Product.Application.PipelineBehaviors;
@@ -19,16 +20,18 @@ public class ValidationBehavior<TRequest, TResponse> : IPipelineBehavior<TReques
 
         var context = new ValidationContext<TRequest>(request);
 
-        var errorsDictionary = this.validators
-            .Select(validator => validator.Validate(context))
-            .SelectMany(validationResult => validationResult.Errors)
-            .Where(validationFailure => validationFailure is not null)
-            .Distinct()
-            .ToArray();
+        List<ValidationFailure> failures = new ();
 
-        if (errorsDictionary.Any())
+        foreach (var validator in this.validators)
         {
-            throw new ValidationException(errorsDictionary);
+            var result = await validator.ValidateAsync(context, cancellationToken);
+            
+            failures.AddRange(result.Errors.Where(validationFailure => validationFailure is not null).Distinct());
+        }
+        
+        if (failures.Any())
+        {
+            throw new ValidationException(failures);
         }
 
         return await next();
