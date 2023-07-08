@@ -9,5 +9,6 @@ public record UpdateProductCommand(
     string Description,
     Guid CategoryId) : IRequest<UpdateProductResponse>
 {
+    // used for mapping the id in the controller
     public Guid Id { get; set; } = Id;
 }

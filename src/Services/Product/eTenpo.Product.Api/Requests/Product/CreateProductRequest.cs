@@ -1,4 +1,4 @@
-﻿namespace eTenpo.Product.Api.Dtos.Product;
+﻿namespace eTenpo.Product.Api.Requests.Product;
 
 public class CreateProductRequest : ProductBaseRequest
 {
