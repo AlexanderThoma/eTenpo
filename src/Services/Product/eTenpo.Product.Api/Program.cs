@@ -1,5 +1,6 @@
 using Asp.Versioning;
 using Asp.Versioning.ApiExplorer;
+using CorrelationId.DependencyInjection;
 using eTenpo.Product.Api.HealthChecks;
 using eTenpo.Product.Api.Middleware;
 using eTenpo.Product.Api.Services;
@@ -7,6 +8,8 @@ using eTenpo.Product.Api.Swagger;
 using eTenpo.Product.Application;
 using eTenpo.Product.Infrastructure;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
+using Microsoft.EntityFrameworkCore;
+using Polly;
 using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -17,6 +20,17 @@ var logger = new LoggerConfiguration()
     .CreateLogger();
 builder.Logging.ClearProviders();
 builder.Logging.AddSerilog(logger);
+
+builder.Services.AddDefaultCorrelationId(options =>
+{
+    options.AddToLoggingScope = true;
+    options.EnforceHeader = false;
+    options.IgnoreRequestHeader = false;
+    options.IncludeInResponse = true;
+    options.RequestHeader = "X-Correlation-Id";
+    options.ResponseHeader = "X-Correlation-Id";
+    options.UpdateTraceIdentifier = false;
+});
 
 builder.Services.AddTransient<GlobalExceptionMiddleware>();
 
@@ -31,7 +45,7 @@ builder.Services
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+
 
 builder.Services.AddQuartzServices();
 builder.Services.AddAutoMapper(typeof(Program).Assembly);
@@ -43,11 +57,34 @@ builder.Services.AddApiVersioning(options =>
     options.ApiVersionReader = new UrlSegmentApiVersionReader();
     options.AssumeDefaultVersionWhenUnspecified = true;
     options.DefaultApiVersion = new ApiVersion(1, 0);
+}).AddApiExplorer(options =>
+{
+    // "'v'major[.minor][-status]"
+    options.GroupNameFormat = "'v'VVV";
+
+    // note: this option is only necessary when versioning by url segment. the SubstitutionFormat
+    // can also be used to control the format of the API version in route templates
+    options.SubstituteApiVersionInUrl = true;
 });
 
+builder.Services.AddSwaggerGen();
 builder.Services.ConfigureOptions<ConfigureSwaggerOptions>();
 
 var app = builder.Build();
+
+// TODO: add migration here
+Policy retryPolicy = Policy.Handle<Exception>().WaitAndRetry(
+    5,
+    retryAttempt => TimeSpan.FromSeconds(Math.Pow(2, retryAttempt)),
+    (exception, timeSpan, context) => { Log.Error(exception, "Database is currently not available"); });
+
+retryPolicy.Execute(
+    () =>
+    {
+        using var dbContext = app.Services.GetRequiredService<ApplicationDbContext>();
+        dbContext.Database.Migrate();
+    });
+
 
 app.UseMiddleware<GlobalExceptionMiddleware>();
 

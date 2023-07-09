@@ -9,7 +9,7 @@ public class GlobalExceptionMiddleware : IMiddleware
     private readonly ILogger logger;
     private readonly IWebHostEnvironment environment;
 
-    public GlobalExceptionMiddleware(ILogger logger, IWebHostEnvironment environment)
+    public GlobalExceptionMiddleware(ILogger<GlobalExceptionMiddleware> logger, IWebHostEnvironment environment)
     {
         this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
         this.environment = environment;

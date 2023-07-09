@@ -20,8 +20,6 @@ public class ProductUpdateCommandHandler : ICommandHandler<UpdateProductCommand,
     
     public async Task<UpdateProductResponse> Handle(UpdateProductCommand request, CancellationToken cancellationToken)
     {
-        // TODO: maybe refactor (put validations to other place (inside domain or validationPipeline))
-        // validate category id
         if (!await this.categoryRepository.Exists(request.CategoryId))
         {
             throw new ProductValidationException($"Category with Id \"{request.CategoryId}\" does not exist",
@@ -42,6 +40,7 @@ public class ProductUpdateCommandHandler : ICommandHandler<UpdateProductCommand,
         product.UpdateName(new Name(request.Name));
         product.UpdatePrice(new Price(request.Price));
         product.ChangeCategory(new CategoryId(request.CategoryId));
+        product.UpdateDescription(new Description(request.Description));
 
         await this.unitOfWork.SaveChangesAsync(cancellationToken);
         

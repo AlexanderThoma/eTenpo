@@ -66,6 +66,11 @@ public class Product : AggregateRoot
     
     public void ChangeCategory(CategoryId id)
     {
+        if (this.CategoryId == id)
+        {
+            return;
+        }
+        
         this.CategoryId = id;
     }
 
