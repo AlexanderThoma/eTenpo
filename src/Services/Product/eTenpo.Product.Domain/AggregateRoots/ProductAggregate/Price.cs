@@ -1,14 +1,15 @@
 using eTenpo.Product.Domain.Common;
 using eTenpo.Product.Domain.Exceptions;
-using eTenpo.Product.Domain.Exceptions.Base;
 
 namespace eTenpo.Product.Domain.AggregateRoots.ProductAggregate;
 
 public class Price : ValueObject
 {
+    public const decimal MinValue = decimal.Zero;
+    
     public Price(decimal value)
     {
-        if (value <= 0)
+        if (value <= MinValue)
         {
             throw new ProductValidationException("Price can not be zero or negative",
                 new ArgumentException(null, nameof(value)));

@@ -1,4 +1,5 @@
-﻿using eTenpo.Product.Infrastructure.Tables;
+﻿using eTenpo.Product.Domain.AggregateRoots.ProductAggregate;
+using eTenpo.Product.Infrastructure.Tables;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -15,17 +16,32 @@ public class ProductConfiguration : IEntityTypeConfiguration<Domain.AggregateRoo
         builder.HasIndex(c => c.Name).IsUnique();
 
         builder.Ignore(x => x.DomainEvents);
+        
+        // DDD comment: length restrictions or other validations are done inside the value objects
+        // and should not be verified here
+        
+        // add conversion for value objects, because ef core cannot do the mapping by itself
 
-        /*
-
-        builder.Property(c => c.Id).HasConversion(
-            customerId => customerId.Value,
-            value => new CustomerId(value));
-
-        builder.Property(c => c.Name).HasMaxLength(100);
-
-        builder.Property(c => c.Email).HasMaxLength(255);
-
-        */
+        builder.Property(c => c.Name)
+            .IsRequired()
+            .HasConversion(prop => prop.Value,
+                value => new Name(value));
+        
+        builder.Property(c => c.Price)
+            .HasConversion(prop => prop.Value,
+            value => new Price(value));
+        
+        builder.Property(c => c.Description)
+            .HasConversion(prop => prop.Value,
+            value => new Description(value));
+        
+        builder.Property(c => c.AvailableStock)
+            .HasConversion(prop => prop.Value,
+            value => new Stock(value));
+        
+        builder.Property(c => c.CategoryId)
+            .IsRequired()
+            .HasConversion(prop => prop.Value,
+            value => new CategoryId(value));
     }
 }

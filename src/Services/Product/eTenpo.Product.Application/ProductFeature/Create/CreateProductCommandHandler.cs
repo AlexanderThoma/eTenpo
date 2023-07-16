@@ -1,5 +1,4 @@
 using eTenpo.Product.Application.CommandQueryAbstractions;
-using eTenpo.Product.Domain.AggregateRoots.ProductAggregate;
 using eTenpo.Product.Domain.Contracts;
 using eTenpo.Product.Domain.Exceptions;
 

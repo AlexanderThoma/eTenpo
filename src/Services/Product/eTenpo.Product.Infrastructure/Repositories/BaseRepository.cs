@@ -11,7 +11,7 @@ public abstract class BaseRepository<TAggregateRoot> where TAggregateRoot : Aggr
         this.DbSet = dbContext.Set<TAggregateRoot>();
     }
     
-    protected DbSet<TAggregateRoot> DbSet { get; init; }
+    protected DbSet<TAggregateRoot> DbSet { get; }
     
     protected IQueryable<TAggregateRoot> ApplySpecification(
         BaseSpecification<TAggregateRoot> specification)

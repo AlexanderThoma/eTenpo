@@ -1,14 +1,15 @@
 using eTenpo.Product.Domain.Common;
 using eTenpo.Product.Domain.Exceptions;
-using eTenpo.Product.Domain.Exceptions.Base;
 
 namespace eTenpo.Product.Domain.AggregateRoots.ProductAggregate;
 
 public class Stock : ValueObject
 {
+    public const int MinValue = 1;
+    
     public Stock(int value = 1)
     {
-        if (value < 0)
+        if (value < MinValue)
         {
             throw new ProductValidationException("Stock can not be zero or negative",
                 new ArgumentException(null, nameof(value)));
