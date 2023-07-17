@@ -72,7 +72,6 @@ builder.Services.ConfigureOptions<ConfigureSwaggerOptions>();
 
 var app = builder.Build();
 
-// TODO: add migration here
 Policy retryPolicy = Policy.Handle<Exception>().WaitAndRetry(
     5,
     retryAttempt => TimeSpan.FromSeconds(Math.Pow(2, retryAttempt)),
@@ -81,10 +80,10 @@ Policy retryPolicy = Policy.Handle<Exception>().WaitAndRetry(
 retryPolicy.Execute(
     () =>
     {
-        using var dbContext = app.Services.GetRequiredService<ApplicationDbContext>();
+        using var scope = app.Services.CreateScope();
+        var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
         dbContext.Database.Migrate();
     });
-
 
 app.UseMiddleware<GlobalExceptionMiddleware>();
 
@@ -109,7 +108,18 @@ if (app.Environment.IsDevelopment())
     });
 }
 
-app.UseSerilogRequestLogging();
+/*app.UseSerilogRequestLogging(options =>
+{
+    options.GetLevel = (ctx, elapsed, ex) =>
+    {
+        if (ex != null || ctx.Response.StatusCode > 499)
+        {
+            return LogEventLevel.Error;
+        }
+        
+        return ctx.Response.StatusCode > 399 ? LogEventLevel.Warning : LogEventLevel.Information;
+    };
+});*/
 
 app.UseAuthorization();
 
