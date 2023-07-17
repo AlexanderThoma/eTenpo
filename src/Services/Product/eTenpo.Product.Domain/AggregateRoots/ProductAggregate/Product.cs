@@ -7,6 +7,11 @@ namespace eTenpo.Product.Domain.AggregateRoots.ProductAggregate;
 
 public class Product : AggregateRoot
 {
+    // used by EF core
+#pragma warning disable CS8618
+    private Product(){}
+#pragma warning restore CS8618
+    
     public Product(string name, decimal price, string description, Guid categoryId)
     {
         this.Name = new Name(name);
