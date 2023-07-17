@@ -34,7 +34,7 @@ builder.Services.AddDefaultCorrelationId(options =>
 
 builder.Services.AddTransient<GlobalExceptionMiddleware>();
 
-//builder.Services.AddCustomHealthChecks(builder.Configuration);
+builder.Services.AddCustomHealthChecks(builder.Configuration);
 
 // TODO: use marker interfaces to register services 'on the fly', e.g. ITransient, IScoped, ISingleton, with "Scrutor"
 // TODO: maybe it's worth to see decorator functionality of Scrutor for some services
