@@ -9,36 +9,18 @@ namespace eTenpo.Product.Api.HealthChecks;
 
 public static class HealthChecksExtension
 {
-    public static IServiceCollection AddCustomHealthChecks(this IServiceCollection services, Microsoft.Extensions.Configuration.ConfigurationManager config)
+    public static IServiceCollection AddCustomHealthChecks(this IServiceCollection services, ConfigurationManager config)
     {
-        var sqlConnectionString = config.GetRequiredConnectionString("SqlServer");
-
         services.AddHealthChecks()
             .AddCheck("self", () => HealthCheckResult.Healthy())
-            .AddDbContextCheck<ApplicationDbContext>(name: "database", HealthStatus.Degraded,
-                tags: new[] { "startup" });
-        //.AddSqlServer(sqlConnectionString, name: "sqlserver", tags: new[] { "startup" })
+            .AddDbContextCheck<ApplicationDbContext>(name: "sqlserver", HealthStatus.Unhealthy,
+                tags: new[] { "startup" })
             /*.AddAzureServiceBusTopic(
                 _ => config.GetRequiredValue("EventBus:ConnectionString"),
                 _ => config.GetRequiredValue("EventBus:TopicName"),
                 name: "azureservicebus",
-                tags: new[] { "startup" });*/
+                tags: new[] { "startup" })*/;
         
-        /*services.AddHealthChecksUI(setup =>
-        {
-            //All the excedent requests will result in 429 (Too many requests)
-            setup.SetApiMaxActiveRequests(3);
-            
-            // UI polls every 10 seconds for status
-            setup.SetEvaluationTimeInSeconds(10);
-
-            // execution history of an endpoint is saved up to 50 entries
-            setup.MaximumHistoryEntriesPerEndpoint(50);
-
-        })
-            //.AddSqlServerStorage(sqlConnectionString)
-            ;
-        */
         return services;
     }
 }

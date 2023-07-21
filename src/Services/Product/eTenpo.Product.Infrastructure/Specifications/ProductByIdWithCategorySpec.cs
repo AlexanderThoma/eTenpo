@@ -7,6 +7,7 @@ public class ProductByIdWithCategorySpec : BaseSpecification<Domain.AggregateRoo
     public ProductByIdWithCategorySpec(Guid productId) :
         base(product => product.Id == productId)
     {
-        AddInclude(x => x.Category!);
+        // TODO: uncomment after adding categories
+        //ude(x => x.Category!);
     }
 }

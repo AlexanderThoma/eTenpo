@@ -26,8 +26,15 @@ public class ProcessOutboxMessagesJob : IJob
 
     public async Task Execute(IJobExecutionContext context)
     {
-        var messages = await dbContext.Set<OutboxMessage>().Where(x => x.ProcessedOnUtc == null).Take(20).ToListAsync();
+        var messages = await dbContext.Set<OutboxMessage>().Where(x => x.ProcessedOnUtc == null).OrderBy(x => x.OccurredOnUtc).Take(20).ToListAsync();
 
+        if (!messages.Any())
+        {
+            this.logger.LogWarning("Message queue is empty. Short-circuit method");
+            
+            return;
+        }
+        
         foreach (var outboxMessage in messages)
         {
             var domainEvent = JsonConvert.DeserializeObject<DomainEvent>(outboxMessage.Content);

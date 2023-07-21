@@ -6,6 +6,7 @@ public class ProductsWithCategorySpec : BaseSpecification<Domain.AggregateRoots.
 {
     public ProductsWithCategorySpec() : base(null)
     {
-        this.AddInclude(x => x.Category!);
+        // TODO: uncomment after adding categories
+        //this.AddInclude(x => x.Category!);
     }
 }

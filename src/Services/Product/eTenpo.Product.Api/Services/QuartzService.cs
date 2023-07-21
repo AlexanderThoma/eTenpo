@@ -8,16 +8,19 @@ public static class QuartzService
     // Background job inside the same container (basically the same as Hangfire)
     public static IServiceCollection AddQuartzServices(this IServiceCollection services)
     {
-        services.AddQuartz(configure =>
+        services.AddQuartz(options =>
         {
+            options.UseMicrosoftDependencyInjectionJobFactory();
+            options.UseInMemoryStore();
+            
             var jobKey = new JobKey(nameof(ProcessOutboxMessagesJob));
 
-            configure.AddJob<ProcessOutboxMessagesJob>(jobKey)
+            options.AddJob<ProcessOutboxMessagesJob>(jobKey)
                 .AddTrigger(
                     trigger => trigger.ForJob(jobKey)
                         .WithSimpleSchedule(schedule => schedule.WithIntervalInSeconds(10).RepeatForever()));
     
-            configure.UseMicrosoftDependencyInjectionJobFactory();
+            options.UseMicrosoftDependencyInjectionJobFactory();
         });
         
         services.AddQuartzHostedService();

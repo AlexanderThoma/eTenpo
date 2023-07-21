@@ -21,6 +21,7 @@ var logger = new LoggerConfiguration()
 builder.Logging.ClearProviders();
 builder.Logging.AddSerilog(logger);
 
+// setup correlation id to be set, if not existing
 builder.Services.AddDefaultCorrelationId(options =>
 {
     options.AddToLoggingScope = true;
@@ -148,10 +149,5 @@ app.MapHealthChecks("/healthz/readiness", new HealthCheckOptions
     // reference health check by name
     Predicate = r => r.Name.Contains("self")
 });
-
-/*app.MapHealthChecksUI(options =>
-{
-    options.ApiPath = "healthchecks-ui";
-});*/
 
 app.Run();
