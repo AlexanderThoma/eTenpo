@@ -21,6 +21,9 @@ var logger = new LoggerConfiguration()
 builder.Logging.ClearProviders();
 builder.Logging.AddSerilog(logger);
 
+// can be used for debugging logging issues with the config
+// Serilog.Debugging.SelfLog.Enable(Console.Error);
+
 // setup correlation id to be set, if not existing
 builder.Services.AddDefaultCorrelationId(options =>
 {

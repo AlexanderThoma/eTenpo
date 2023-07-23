@@ -30,7 +30,7 @@ public class ProcessOutboxMessagesJob : IJob
 
         if (!messages.Any())
         {
-            this.logger.LogWarning("Message queue is empty. Short-circuit method");
+            this.logger.LogInformation("Message queue is empty");
             
             return;
         }

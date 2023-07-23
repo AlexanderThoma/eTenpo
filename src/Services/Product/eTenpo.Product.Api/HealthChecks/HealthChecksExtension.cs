@@ -1,5 +1,4 @@
-﻿using eTenpo.Product.Api.Configuration;
-using eTenpo.Product.Infrastructure;
+﻿using eTenpo.Product.Infrastructure;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 
 namespace eTenpo.Product.Api.HealthChecks;
