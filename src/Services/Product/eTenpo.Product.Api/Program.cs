@@ -1,5 +1,6 @@
 using Asp.Versioning;
 using Asp.Versioning.ApiExplorer;
+using CorrelationId;
 using CorrelationId.DependencyInjection;
 using eTenpo.Product.Api.HealthChecks;
 using eTenpo.Product.Api.Middleware;
@@ -8,21 +9,20 @@ using eTenpo.Product.Api.Swagger;
 using eTenpo.Product.Application;
 using eTenpo.Product.Infrastructure;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
-using Microsoft.EntityFrameworkCore;
-using Polly;
 using Serilog;
+using Serilog.Events;
 
 var builder = WebApplication.CreateBuilder(args);
 
-var logger = new LoggerConfiguration()
-    .ReadFrom.Configuration(builder.Configuration)
-    .Enrich.FromLogContext()
-    .CreateLogger();
 builder.Logging.ClearProviders();
-builder.Logging.AddSerilog(logger);
+builder.Host.UseSerilog((context, configuration) =>
+{
+    configuration.ReadFrom.Configuration(context.Configuration);
+    configuration.Enrich.FromLogContext();
+});
 
 // can be used for debugging logging issues with the config
-// Serilog.Debugging.SelfLog.Enable(Console.Error);
+ Serilog.Debugging.SelfLog.Enable(Console.Error);
 
 // setup correlation id to be set, if not existing
 builder.Services.AddDefaultCorrelationId(options =>
@@ -75,19 +75,8 @@ builder.Services.AddSwaggerGen();
 builder.Services.ConfigureOptions<ConfigureSwaggerOptions>();
 
 var app = builder.Build();
-
-Policy retryPolicy = Policy.Handle<Exception>().WaitAndRetry(
-    5,
-    retryAttempt => TimeSpan.FromSeconds(Math.Pow(2, retryAttempt)),
-    (exception, timeSpan, context) => { Log.Error(exception, "Database is currently not available"); });
-
-retryPolicy.Execute(
-    () =>
-    {
-        using var scope = app.Services.CreateScope();
-        var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
-        dbContext.Database.Migrate();
-    });
+    
+MigrationService.Migrate(app);
 
 app.UseMiddleware<GlobalExceptionMiddleware>();
 
@@ -112,7 +101,7 @@ if (app.Environment.IsDevelopment())
     });
 }
 
-/*app.UseSerilogRequestLogging(options =>
+app.UseSerilogRequestLogging(options =>
 {
     options.GetLevel = (ctx, elapsed, ex) =>
     {
@@ -123,11 +112,14 @@ if (app.Environment.IsDevelopment())
         
         return ctx.Response.StatusCode > 399 ? LogEventLevel.Warning : LogEventLevel.Information;
     };
-});*/
+});
 
-app.UseAuthorization();
+//app.UseAuthentication();
+//app.UseAuthorization();
 
 app.MapControllers();
+
+app.UseCorrelationId();
 
 // TODO: security, add requireCors and requireAuthorization, consider deactivation of caching
 
