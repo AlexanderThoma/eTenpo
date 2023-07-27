@@ -103,6 +103,11 @@ if (app.Environment.IsDevelopment())
 
 app.UseSerilogRequestLogging(options =>
 {
+    options.EnrichDiagnosticContext = (context, httpContext) =>
+    {
+        context.Set("QueryString", httpContext.Request.QueryString);
+    };
+    
     options.GetLevel = (ctx, elapsed, ex) =>
     {
         if (ex != null || ctx.Response.StatusCode > 499)
