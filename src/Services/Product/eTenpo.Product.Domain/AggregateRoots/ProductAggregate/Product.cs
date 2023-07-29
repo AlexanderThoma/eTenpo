@@ -5,9 +5,9 @@ using eTenpo.Product.Domain.Exceptions;
 
 namespace eTenpo.Product.Domain.AggregateRoots.ProductAggregate;
 
-public class Product : AggregateRoot
+public class Product : AggregateRoot, IAuditable
 {
-    // used by EF core
+    // used by EF core migration
 #pragma warning disable CS8618
     private Product(){}
 #pragma warning restore CS8618
@@ -29,6 +29,8 @@ public class Product : AggregateRoot
     public Description Description { get; private set; }
     public Stock AvailableStock { get; private set; }
     public CategoryId CategoryId { get; private set; }
+    public DateTime CreatedOnUtc { get; set; }
+    public DateTime? ModifiedOnUtc { get; set; }
     
     // used as navigation property
     public Category? Category { get; }

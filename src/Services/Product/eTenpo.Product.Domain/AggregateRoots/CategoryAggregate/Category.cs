@@ -3,7 +3,7 @@ using eTenpo.Product.Domain.Common;
 
 namespace eTenpo.Product.Domain.AggregateRoots.CategoryAggregate;
 
-public class Category : AggregateRoot
+public class Category : AggregateRoot, IAuditable
 {
     public Category(Name name, Description description)
     {
@@ -15,4 +15,6 @@ public class Category : AggregateRoot
     public Name Name { get; init; }
     public Description Description { get; init; }
     public List<Guid> Products { get; private set; }
+    public DateTime CreatedOnUtc { get; }
+    public DateTime? ModifiedOnUtc { get; }
 }

@@ -1,4 +1,5 @@
 using eTenpo.Product.Domain.Contracts;
+using eTenpo.Product.Infrastructure.Interceptors;
 using eTenpo.Product.Infrastructure.Repositories;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
@@ -16,6 +17,8 @@ public static class DependencyInjection
         services.AddScoped<IUnitOfWork, UnitOfWork>();
         services.AddScoped<IProductRepository, ProductRepository>();
         services.AddScoped<ICategoryRepository, CategoryRepository>();
+
+        services.AddSingleton<SaveAuditableEntitiesInterceptor>();
         
         return services;
     }
