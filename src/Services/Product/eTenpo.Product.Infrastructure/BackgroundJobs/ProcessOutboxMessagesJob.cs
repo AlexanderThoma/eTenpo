@@ -30,7 +30,7 @@ public class ProcessOutboxMessagesJob : IJob
 
         if (!messages.Any())
         {
-            this.logger.LogInformation("Message queue is empty");
+            //this.logger.LogInformation("Message queue is empty");
             
             return;
         }

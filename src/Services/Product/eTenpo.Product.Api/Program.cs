@@ -3,6 +3,7 @@ using Asp.Versioning.ApiExplorer;
 using CorrelationId;
 using CorrelationId.DependencyInjection;
 using eTenpo.Product.Api.HealthChecks;
+using eTenpo.Product.Api.Logging;
 using eTenpo.Product.Api.Middleware;
 using eTenpo.Product.Api.Services;
 using eTenpo.Product.Api.Swagger;
@@ -16,10 +17,14 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Logging.ClearProviders();
 builder.Host.UseSerilog((context, configuration) =>
-{
-    configuration.ReadFrom.Configuration(context.Configuration);
-    configuration.Enrich.FromLogContext();
-});
+
+    configuration
+        .ReadFrom.Configuration(context.Configuration)
+        .Enrich.FromLogContext()
+        .Enrich.WithEventTypeEnricher()
+);
+
+builder.Services.AddScoped<LoggingEnricherMiddleware>();
 
 // can be used for debugging logging issues with the config
  Serilog.Debugging.SelfLog.Enable(Console.Error);
@@ -37,6 +42,9 @@ builder.Services.AddDefaultCorrelationId(options =>
 });
 
 builder.Services.AddTransient<GlobalExceptionMiddleware>();
+
+builder.Services.AddHttpContextAccessor();
+builder.Services.AddSingleton<EventTypeEnricher>();
 
 builder.Services.AddCustomHealthChecks(builder.Configuration);
 
@@ -103,9 +111,11 @@ if (app.Environment.IsDevelopment())
 
 app.UseSerilogRequestLogging(options =>
 {
-    options.EnrichDiagnosticContext = (context, httpContext) =>
+    // Sets the properties only in the http request
+    options.EnrichDiagnosticContext = (diagnosticContext, httpContext) =>
     {
-        context.Set("QueryString", httpContext.Request.QueryString);
+        diagnosticContext.Set("HttpMethod", httpContext.Request.Method);
+        diagnosticContext.Set("UserAgent", httpContext.Request.Headers["User-Agent"].FirstOrDefault());
     };
     
     options.GetLevel = (ctx, elapsed, ex) =>
@@ -125,6 +135,8 @@ app.UseSerilogRequestLogging(options =>
 app.MapControllers();
 
 app.UseCorrelationId();
+
+app.UseMiddleware<LoggingEnricherMiddleware>();
 
 // TODO: security, add requireCors and requireAuthorization, consider deactivation of caching
 
