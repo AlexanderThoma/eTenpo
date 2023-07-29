@@ -1,6 +1,7 @@
 ﻿using eTenpo.Product.Domain.Exceptions;
 using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 
 namespace eTenpo.Product.Api.Middleware;
 
@@ -37,7 +38,9 @@ public class GlobalExceptionMiddleware : IMiddleware
             problemDetails.Extensions.Add("stackTrace", exception);
         }
         
-        await context.Response.WriteAsJsonAsync(problemDetails);
+        context.Response.ContentType = "application/json";
+        
+        await context.Response.WriteAsync(JsonConvert.SerializeObject(problemDetails));
     }
 
     private ProblemDetails CreateProblemDetails(PathString requestPath, Exception exception)
