@@ -26,10 +26,10 @@ public class ProductUpdateCommandHandler : ICommandHandler<UpdateProductCommand,
                 new ArgumentException(null, nameof(request.CategoryId)));
         }
         
-        var product = await this.productRepository.GetById(request.Id, cancellationToken);
+        var product = await this.productRepository.FindById(request.Id, cancellationToken);
         
         // name uniqueness check
-        var productByName = await this.productRepository.GetByName(request.Name, cancellationToken);
+        var productByName = await this.productRepository.FindByName(request.Name, cancellationToken);
 
         if (productByName is not null && productByName.Id != product.Id)
         {
