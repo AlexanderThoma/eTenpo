@@ -11,7 +11,6 @@ using eTenpo.Product.Application;
 using eTenpo.Product.Infrastructure;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Serilog;
-using Serilog.Events;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -108,26 +107,6 @@ if (app.Environment.IsDevelopment())
         }
     });
 }
-
-app.UseSerilogRequestLogging(options =>
-{
-    // Sets the properties only in the http request
-    options.EnrichDiagnosticContext = (diagnosticContext, httpContext) =>
-    {
-        diagnosticContext.Set("HttpMethod", httpContext.Request.Method);
-        diagnosticContext.Set("UserAgent", httpContext.Request.Headers["User-Agent"].FirstOrDefault());
-    };
-    
-    options.GetLevel = (ctx, elapsed, ex) =>
-    {
-        if (ex != null || ctx.Response.StatusCode > 499)
-        {
-            return LogEventLevel.Error;
-        }
-        
-        return ctx.Response.StatusCode > 399 ? LogEventLevel.Warning : LogEventLevel.Information;
-    };
-});
 
 //app.UseAuthentication();
 //app.UseAuthorization();

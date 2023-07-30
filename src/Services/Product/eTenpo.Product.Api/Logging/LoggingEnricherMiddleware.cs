@@ -21,10 +21,11 @@ public class LoggingEnricherMiddleware : IMiddleware
             LogContext.PushProperty("ApiVersion", version);
         }
 
+        var userAgent = context.Request.Headers["User-Agent"].FirstOrDefault();
+        LogContext.PushProperty("UserAgent", userAgent);
+
         // TODO: how to version app/container correctly???
         //var appVersion = context.Connection.RemoteIpAddress is null ? "unknown" : context.Connection.RemoteIpAddress.ToString();
         //LogContext.PushProperty("IpAddress", ipAddress);
-        
-        await next.Invoke(context);
     }
 }

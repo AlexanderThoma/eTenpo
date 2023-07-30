@@ -3,11 +3,12 @@ using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 
+
 namespace eTenpo.Product.Api.Middleware;
 
 public class GlobalExceptionMiddleware : IMiddleware
 {
-    private readonly ILogger logger;
+    private readonly ILogger<GlobalExceptionMiddleware> logger;
     private readonly IWebHostEnvironment environment;
 
     public GlobalExceptionMiddleware(ILogger<GlobalExceptionMiddleware> logger, IWebHostEnvironment environment)
@@ -27,6 +28,11 @@ public class GlobalExceptionMiddleware : IMiddleware
             this.logger.LogError(ex, "Error occurred");
             await HandleException(context, ex);
         }
+        finally
+        {
+            // make sure that the log is really written to sink
+            await Serilog.Log.CloseAndFlushAsync();
+        }
     }
 
     private async Task HandleException(HttpContext context, Exception exception)
@@ -39,6 +45,9 @@ public class GlobalExceptionMiddleware : IMiddleware
         }
         
         context.Response.ContentType = "application/json";
+        
+        // set correct statuscode for frontend in response (would be 200 otherwise)
+        context.Response.StatusCode = problemDetails.Status!.Value;
         
         await context.Response.WriteAsync(JsonConvert.SerializeObject(problemDetails));
     }
