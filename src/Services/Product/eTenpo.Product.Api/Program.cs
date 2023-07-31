@@ -11,6 +11,7 @@ using eTenpo.Product.Application;
 using eTenpo.Product.Infrastructure;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Serilog;
+using Serilog.Events;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -26,7 +27,7 @@ builder.Host.UseSerilog((context, configuration) =>
 builder.Services.AddScoped<LoggingEnricherMiddleware>();
 
 // can be used for debugging logging issues with the config
- Serilog.Debugging.SelfLog.Enable(Console.Error);
+//Serilog.Debugging.SelfLog.Enable(Console.Error);
 
 // setup correlation id to be set, if not existing
 builder.Services.AddDefaultCorrelationId(options =>
@@ -108,8 +109,36 @@ if (app.Environment.IsDevelopment())
     });
 }
 
+app.UseSerilogRequestLogging(options =>
+{
+    // Sets the properties only in the http request
+    options.EnrichDiagnosticContext = (diagnosticContext, httpContext) =>
+    {
+        diagnosticContext.Set("HttpMethod", httpContext.Request.Method);
+        diagnosticContext.Set("UserAgent", httpContext.Request.Headers["User-Agent"].FirstOrDefault());
+        diagnosticContext.Set("QueryString",
+            httpContext.Request.QueryString.HasValue ? httpContext.Request.QueryString.Value : string.Empty);
+        diagnosticContext.Set("StatusCode", httpContext.Response.StatusCode);
+
+    };
+    
+    options.MessageTemplate = 
+        "HTTP {RequestMethod} {RequestPath}{QueryString} responded {StatusCode} in {Elapsed:0.0000} ms";
+    
+    options.GetLevel = (ctx, elapsed, ex) =>
+    {
+        if (ex != null || ctx.Response.StatusCode > 499)
+        {
+            return LogEventLevel.Error;
+        }
+        
+        return ctx.Response.StatusCode > 399 ? LogEventLevel.Warning : LogEventLevel.Information;
+    };
+});
+
 //app.UseAuthentication();
 //app.UseAuthorization();
+//app.UseSession();
 
 app.MapControllers();
 

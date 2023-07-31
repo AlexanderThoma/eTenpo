@@ -27,5 +27,7 @@ public class LoggingEnricherMiddleware : IMiddleware
         // TODO: how to version app/container correctly???
         //var appVersion = context.Connection.RemoteIpAddress is null ? "unknown" : context.Connection.RemoteIpAddress.ToString();
         //LogContext.PushProperty("IpAddress", ipAddress);
+
+        await next.Invoke(context);
     }
 }
