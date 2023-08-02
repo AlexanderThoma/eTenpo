@@ -48,6 +48,8 @@ builder.Services.AddSingleton<EventTypeEnricher>();
 
 builder.Services.AddCustomHealthChecks(builder.Configuration);
 
+// TODO: addOpenTelemetry with logging, tracing, metrics (with azure monitor export)
+
 // TODO: use marker interfaces to register services 'on the fly', e.g. ITransient, IScoped, ISingleton, with "Scrutor"
 // TODO: maybe it's worth to see decorator functionality of Scrutor for some services
 // add dependencies from other layers
