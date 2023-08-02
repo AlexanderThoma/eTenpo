@@ -18,12 +18,16 @@ public class LoggingBehavior<TRequest, TResponse> : IPipelineBehavior<TRequest, 
         this.logger.LogInformation("Handling request {@RequestName}, {@DateTimeUtc}", 
             typeof(TRequest).Name,
             DateTime.UtcNow);
+        
+        this.logger.LogDebug("Handling request with parameter {@Parameter}", request);
 
         var result = await next();
 
         this.logger.LogInformation("Completed request {@RequestName}, {@DateTimeUtc}", 
             typeof(TRequest).Name,
             DateTime.UtcNow);
+        
+        this.logger.LogDebug("Completed request with return value {@Value}", result);
         
         return result;
     }

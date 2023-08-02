@@ -42,7 +42,7 @@ public class ConfigureSwaggerOptions
 
         if (desc.IsDeprecated)
         {
-            info.Description += " This API version has been deprecated. Please use a newer one.";
+            info.Description += " This API version has been deprecated. Please use a recent one.";
         }
 
         return info;

@@ -15,6 +15,8 @@ using Serilog.Events;
 
 var builder = WebApplication.CreateBuilder(args);
 
+// TODO: evaluate better way of logging centrally providing an event id for the log
+
 builder.Logging.ClearProviders();
 builder.Host.UseSerilog((context, configuration) =>
 

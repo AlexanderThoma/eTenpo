@@ -1,6 +1,7 @@
 using eTenpo.Product.Application.CommandQueryAbstractions;
 using eTenpo.Product.Domain.Contracts;
 using eTenpo.Product.Domain.Exceptions;
+using Microsoft.Extensions.Logging;
 
 namespace eTenpo.Product.Application.ProductFeature.Delete;
 
@@ -8,15 +9,19 @@ public class DeleteProductHandler : ICommandHandler<DeleteProductCommand>
 {
     private readonly IProductRepository productRepository;
     private readonly IUnitOfWork unitOfWork;
+    private readonly ILogger<DeleteProductHandler> logger;
 
-    public DeleteProductHandler(IProductRepository productRepository, IUnitOfWork unitOfWork)
+    public DeleteProductHandler(IProductRepository productRepository, IUnitOfWork unitOfWork, ILogger<DeleteProductHandler> logger)
     {
         this.productRepository = productRepository;
         this.unitOfWork = unitOfWork;
+        this.logger = logger;
     }
     
     public async Task Handle(DeleteProductCommand request, CancellationToken cancellationToken)
     {
+        this.logger.LogInformation("Try to get the product with id {Id} from database", request.Id);
+        
         var product = await this.productRepository.FindById(request.Id, cancellationToken);
 
         if (product is null)
@@ -24,10 +29,10 @@ public class DeleteProductHandler : ICommandHandler<DeleteProductCommand>
             throw new EntityNotFoundException($"Product with id {request.Id} could not be found");
         }
         
-        // mark as deleted in changeTracker
+        this.logger.LogInformation("Mark the product as deleted");
         this.productRepository.Delete(product);
         
-        // generate domain event
+        this.logger.LogInformation("Create the productDeleted event");
         product.Delete();
         
         await this.unitOfWork.SaveChangesAsync(cancellationToken);
