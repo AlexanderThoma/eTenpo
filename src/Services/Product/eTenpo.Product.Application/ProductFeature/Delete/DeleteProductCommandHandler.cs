@@ -5,13 +5,13 @@ using Microsoft.Extensions.Logging;
 
 namespace eTenpo.Product.Application.ProductFeature.Delete;
 
-public class DeleteProductHandler : ICommandHandler<DeleteProductCommand>
+public class DeleteProductCommandHandler : ICommandHandler<DeleteProductCommand>
 {
     private readonly IProductRepository productRepository;
     private readonly IUnitOfWork unitOfWork;
-    private readonly ILogger<DeleteProductHandler> logger;
+    private readonly ILogger<DeleteProductCommandHandler> logger;
 
-    public DeleteProductHandler(IProductRepository productRepository, IUnitOfWork unitOfWork, ILogger<DeleteProductHandler> logger)
+    public DeleteProductCommandHandler(IProductRepository productRepository, IUnitOfWork unitOfWork, ILogger<DeleteProductCommandHandler> logger)
     {
         this.productRepository = productRepository;
         this.unitOfWork = unitOfWork;

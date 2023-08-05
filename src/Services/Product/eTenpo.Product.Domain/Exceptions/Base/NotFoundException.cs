@@ -2,16 +2,16 @@ namespace eTenpo.Product.Domain.Exceptions.Base;
 
 public abstract class NotFoundException : ProductDomainException
 {
-    public NotFoundException()
+    protected NotFoundException()
     {
     }
 
-    public NotFoundException(string message)
+    protected NotFoundException(string message)
         : base(message)
     {
     }
 
-    public NotFoundException(string message, Exception innerException)
+    protected NotFoundException(string message, Exception innerException)
         : base(message, innerException)
     {
     }

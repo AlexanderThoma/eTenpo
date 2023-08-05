@@ -6,20 +6,20 @@ using Microsoft.Extensions.Logging;
 
 namespace eTenpo.Product.Application.ProductFeature.Read.Single;
 
-public class GetSingleProductHandler : IQueryHandler<GetSingleProductRequest, GetSingleProductResponse>
+public class GetSingleProductRequestHandler : IQueryHandler<GetSingleProductRequest, GetSingleProductRequestResponse>
 {
     private readonly IProductRepository repo;
     private readonly IMapper mapper;
-    private readonly ILogger<GetSingleProductHandler> logger;
+    private readonly ILogger<GetSingleProductRequestHandler> logger;
 
-    public GetSingleProductHandler(IProductRepository repo, IMapper mapper, ILogger<GetSingleProductHandler> logger)
+    public GetSingleProductRequestHandler(IProductRepository repo, IMapper mapper, ILogger<GetSingleProductRequestHandler> logger)
     {
         this.repo = repo;
         this.mapper = mapper;
         this.logger = logger;
     }
     
-    public async Task<GetSingleProductResponse> Handle(GetSingleProductRequest request, CancellationToken cancellationToken)
+    public async Task<GetSingleProductRequestResponse> Handle(GetSingleProductRequest request, CancellationToken cancellationToken)
     {
         this.logger.LogInformation("Get product with id {Id} including category from database", request.Id);
         var product = await this.repo.FindByIdWithCategory(request.Id, cancellationToken);
@@ -29,6 +29,6 @@ public class GetSingleProductHandler : IQueryHandler<GetSingleProductRequest, Ge
             throw new EntityNotFoundException($"Product with id {request.Id} could not be found");
         }
         
-        return this.mapper.Map<GetSingleProductResponse>(product);
+        return this.mapper.Map<GetSingleProductRequestResponse>(product);
     }
 }

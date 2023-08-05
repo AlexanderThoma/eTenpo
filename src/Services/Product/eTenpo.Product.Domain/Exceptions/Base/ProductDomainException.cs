@@ -2,16 +2,16 @@ namespace eTenpo.Product.Domain.Exceptions.Base;
 
 public abstract class ProductDomainException : Exception
 {
-    public ProductDomainException()
+    protected ProductDomainException()
     {
     }
 
-    public ProductDomainException(string message)
+    protected ProductDomainException(string message)
         : base(message)
     {
     }
 
-    public ProductDomainException(string message, Exception innerException)
+    protected ProductDomainException(string message, Exception innerException)
         : base(message, innerException)
     {
     }

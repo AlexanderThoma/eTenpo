@@ -43,5 +43,14 @@ public class ProductConfiguration : IEntityTypeConfiguration<Domain.AggregateRoo
             .IsRequired()
             .HasConversion(prop => prop.Value,
             value => new CategoryId(value));
+        
+        builder.HasOne(a => a.Category)
+            .WithMany()
+            .HasForeignKey(b => b.CategoryId)
+            .OnDelete(DeleteBehavior.NoAction);
+        
+        builder.Property(c => c.CreatedOnUtc).IsRequired();
+        
+        builder.Property(c => c.ModifiedOnUtc);
     }
 }

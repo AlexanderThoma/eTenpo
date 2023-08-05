@@ -6,14 +6,14 @@ using Microsoft.Extensions.Logging;
 
 namespace eTenpo.Product.Application.ProductFeature.Update;
 
-public class ProductUpdateCommandHandler : ICommandHandler<UpdateProductCommand, UpdateProductResponse>
+public class UpdateProductCommandHandler : ICommandHandler<UpdateProductCommand, UpdateProductCommandResponse>
 {
     private readonly IProductRepository productRepository;
     private readonly ICategoryRepository categoryRepository;
     private readonly IUnitOfWork unitOfWork;
-    private readonly ILogger<ProductUpdateCommandHandler> logger;
+    private readonly ILogger<UpdateProductCommandHandler> logger;
 
-    public ProductUpdateCommandHandler(IProductRepository productRepository, ICategoryRepository categoryRepository, IUnitOfWork unitOfWork, ILogger<ProductUpdateCommandHandler> logger)
+    public UpdateProductCommandHandler(IProductRepository productRepository, ICategoryRepository categoryRepository, IUnitOfWork unitOfWork, ILogger<UpdateProductCommandHandler> logger)
     {
         this.productRepository = productRepository;
         this.categoryRepository = categoryRepository;
@@ -21,7 +21,7 @@ public class ProductUpdateCommandHandler : ICommandHandler<UpdateProductCommand,
         this.logger = logger;
     }
     
-    public async Task<UpdateProductResponse> Handle(UpdateProductCommand request, CancellationToken cancellationToken)
+    public async Task<UpdateProductCommandResponse> Handle(UpdateProductCommand request, CancellationToken cancellationToken)
     {
         await ValidateCategoryId(request.CategoryId);
 
@@ -36,7 +36,7 @@ public class ProductUpdateCommandHandler : ICommandHandler<UpdateProductCommand,
 
         await this.unitOfWork.SaveChangesAsync(cancellationToken);
         
-        return new UpdateProductResponse(product.Id);
+        return new UpdateProductCommandResponse(product.Id);
     }
 
     private async Task ValidateNameUniqueness(string newProductName, CancellationToken cancellationToken,

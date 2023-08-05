@@ -1,6 +1,6 @@
 namespace eTenpo.Product.Application.ProductFeature.Read;
 
-public abstract record ProductBaseResponse(Guid Id,
+public abstract record ProductBaseRequestResponse(Guid Id,
     string Name,
     decimal Price,
     string Description,

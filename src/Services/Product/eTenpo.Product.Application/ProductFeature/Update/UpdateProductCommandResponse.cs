@@ -1,3 +1,3 @@
 namespace eTenpo.Product.Application.ProductFeature.Update;
 
-public record UpdateProductResponse(Guid Id);
+public record UpdateProductCommandResponse(Guid Id);

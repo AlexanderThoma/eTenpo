@@ -7,7 +7,7 @@ public record UpdateProductCommand(
     string Name,
     decimal Price,
     string Description,
-    Guid CategoryId) : ICommand<UpdateProductResponse>
+    Guid CategoryId) : ICommand<UpdateProductCommandResponse>
 {
     // used for mapping the id in the controller
     public Guid Id { get; set; } = Id;

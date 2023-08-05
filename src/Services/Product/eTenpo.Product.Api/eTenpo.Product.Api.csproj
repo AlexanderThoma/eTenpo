@@ -47,4 +47,7 @@
       <ProjectReference Include="..\eTenpo.Product.Infrastructure\eTenpo.Product.Infrastructure.csproj" />
     </ItemGroup>
 
+
+
+
 </Project>
