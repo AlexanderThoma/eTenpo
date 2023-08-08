@@ -41,5 +41,12 @@ public class CreateProductCommandValidator : AbstractValidator<CreateProductComm
             .NotEmpty()
             .WithName("empty_categoryId")
             .WithMessage("Product category id must be set");
+        
+        //  TODO: add respository checks via DI of repo in pipeline
+        /*RuleFor(c => c.Name).MustAsync(async (name, _) =>
+        {
+            return await productRepository.IsNameUniqueAsync(name);
+        }).WithMessage("The name must be unique");*/
+
     }
 }
