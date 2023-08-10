@@ -18,7 +18,7 @@ public class Product : AggregateRoot, IAuditable
         this.Price = new Price(price);
         this.Description = new Description(description);
         this.AvailableStock = new Stock();
-        this.CategoryId = new CategoryId(categoryId);
+        this.CategoryId = categoryId;
         this.Category = null;
         
         this.AddDomainEvent(new ProductCreatedEvent(this));
@@ -28,7 +28,7 @@ public class Product : AggregateRoot, IAuditable
     public Price Price { get; private set; }
     public Description Description { get; private set; }
     public Stock AvailableStock { get; private set; }
-    public CategoryId CategoryId { get; private set; }
+    public Guid CategoryId { get; private set; }
     public DateTime CreatedOnUtc { get; set; }
     public DateTime? ModifiedOnUtc { get; set; }
     
@@ -71,7 +71,7 @@ public class Product : AggregateRoot, IAuditable
         this.AddDomainEvent(new ProductPriceUpdatedEvent(this.Id, this.Price.Value, newPrice.Value));
     }
     
-    public void ChangeCategory(CategoryId id)
+    public void ChangeCategory(Guid id)
     {
         if (this.CategoryId == id)
         {

@@ -31,7 +31,7 @@ public class UpdateProductCommandHandler : ICommandHandler<UpdateProductCommand,
 
         product.UpdateName(new Name(request.Name));
         product.UpdatePrice(new Price(request.Price));
-        product.ChangeCategory(new CategoryId(request.CategoryId));
+        product.ChangeCategory(request.CategoryId);
         product.UpdateDescription(new Description(request.Description));
 
         await this.unitOfWork.SaveChangesAsync(cancellationToken);
