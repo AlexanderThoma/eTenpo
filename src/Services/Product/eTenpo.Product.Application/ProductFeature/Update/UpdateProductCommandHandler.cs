@@ -23,11 +23,11 @@ public class UpdateProductCommandHandler : ICommandHandler<UpdateProductCommand,
     
     public async Task<UpdateProductCommandResponse> Handle(UpdateProductCommand request, CancellationToken cancellationToken)
     {
-        await ValidateCategoryId(request.CategoryId);
+        await this.ValidateCategoryId(request.CategoryId);
 
-        var product = await GetProductFromDatabase(request, cancellationToken);
+        var product = await this.GetProductFromDatabase(request, cancellationToken);
 
-        await ValidateNameUniqueness(request.Name, cancellationToken, product);
+        await this.ValidateNameUniqueness(request.Name, cancellationToken, product);
 
         product.UpdateName(new Name(request.Name));
         product.UpdatePrice(new Price(request.Price));

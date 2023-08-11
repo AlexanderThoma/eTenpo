@@ -18,6 +18,12 @@ public class CategoryMappingProfile : Profile
             .ForMember(command => command.Description,
                 expression => expression.MapFrom(x => x.Description));
         
+        CreateMap<Category, CreateCategoryCommandResponse>()
+            .ForMember(command => command.Name,
+                expression => expression.MapFrom(x => x.Name))
+            .ForMember(command => command.Description,
+                expression => expression.MapFrom(x => x.Description));
+        
         CreateMap<UpdateCategoryRequest, UpdateCategoryCommand>()
             .ForMember(command => command.Name,
                 expression => expression.MapFrom(x => x.Name))

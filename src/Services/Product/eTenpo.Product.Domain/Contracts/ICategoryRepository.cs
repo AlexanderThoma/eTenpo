@@ -7,6 +7,8 @@ public interface ICategoryRepository : IRepository<Category>
     Task<bool> Exists(Guid id);
     
     Task<Category?> FindById(Guid id, CancellationToken cancellationToken = default);
+
+    Task<Category?> FindByIdWithProducts(Guid id, CancellationToken cancellationToken = default);
     
     Task<List<Category>> GetAll(CancellationToken cancellationToken = default);
     

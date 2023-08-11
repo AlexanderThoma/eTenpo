@@ -39,7 +39,7 @@ public class CategoriesController : BaseApiController
         this.logger.LogInformation("The category was created successfully");
         this.logger.LogDebug("Returning with the created category {@Category}", response);
         
-        return this.CreatedAtAction(nameof(GetById), new { id = response.Id });
+        return this.CreatedAtAction(nameof(GetById), new { id = response.Id }, response);
     }
     
     [HttpGet]

@@ -15,6 +15,9 @@ public class CategoryRepository : BaseRepository<Category>, ICategoryRepository
     
     public async Task<Category?> FindById(Guid id, CancellationToken cancellationToken = default) => await this.ApplySpecification(new CategoryByIdSpec(id))
         .SingleOrDefaultAsync(cancellationToken);
+    
+    public async Task<Category?> FindByIdWithProducts(Guid id, CancellationToken cancellationToken = default) => await this.ApplySpecification(new CategoryByIdWithProductsSpec(id))
+        .SingleOrDefaultAsync(cancellationToken);
 
     public async Task<List<Category>> GetAll(CancellationToken cancellationToken = default) => await this.DbSet.ToListAsync(cancellationToken);
 

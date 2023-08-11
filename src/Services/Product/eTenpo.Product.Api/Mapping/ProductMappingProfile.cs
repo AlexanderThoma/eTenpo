@@ -27,6 +27,18 @@ public class ProductMappingProfile : Profile
             .ForMember(command => command.CategoryId,
                 expression => expression.MapFrom(x => x.CategoryId));
         
+        CreateMap<Domain.AggregateRoots.ProductAggregate.Product, CreateProductCommandResponse>()
+            .ForMember(command => command.Name,
+                expression => expression.MapFrom(x => x.Name))
+            .ForMember(command => command.Price,
+                expression => expression.MapFrom(x => x.Price))
+            .ForMember(command => command.Description,
+                expression => expression.MapFrom(x => x.Description))
+            .ForMember(command => command.AvailableStock,
+                expression => expression.MapFrom(x => x.AvailableStock))
+            .ForMember(command => command.CategoryId,
+                expression => expression.MapFrom(x => x.CategoryId));
+        
         CreateMap<UpdateProductRequest, UpdateProductCommand>()
             .ForMember(command => command.Name,
                 expression => expression.MapFrom(x => x.Name))

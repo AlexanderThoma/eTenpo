@@ -7,10 +7,15 @@ public class Category : AggregateRoot, IAuditable
 {
     private List<ProductAggregate.Product> products = new ();
 
-    public Category(CategoryName name, CategoryDescription description)
+    // used by EF core migration
+#pragma warning disable CS8618
+    private Category(){}
+#pragma warning restore CS8618
+    
+    public Category(string name, string description)
     {
-        this.Name = name;
-        this.Description = description;
+        this.Name = new CategoryName(name);
+        this.Description = new CategoryDescription(description);
     }
     
     public CategoryName Name { get; private set; }
