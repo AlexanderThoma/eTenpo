@@ -27,7 +27,7 @@ public class ProductsController : BaseApiController
     [HttpPost]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public async Task<ActionResult<CreateProductCommandResponse>> Create([FromBody] CreateCategoryRequest request)
+    public async Task<ActionResult<CreateProductCommandResponse>> Create([FromBody] CreateProductRequest request)
     {
         this.logger.LogInformation("The create endpoint was triggered");
         this.logger.LogDebug("With the parameter {@Parameter}", request);
@@ -96,4 +96,23 @@ public class ProductsController : BaseApiController
         
         return this.NoContent();
     }
+    
+    /*[HttpPut("{id:guid}/addstock")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<ActionResult<UpdateProductCommandResponse>> Update(Guid id, [FromBody] UpdateProductRequest request)
+    {
+        this.logger.LogInformation("The update endpoint was triggered");
+        this.logger.LogDebug("With id {Id} and parameter {@Parameter}", id, request);
+        
+        var command = this.mapper.Map<UpdateProductCommand>(request, options => options.AfterMap((_, dest) => dest.Id = id));
+
+        var response = await this.mediator.Send(command);
+
+        this.logger.LogInformation("The product was updated successfully");
+        this.logger.LogDebug("Returning with the updated product {@Product}", response);
+        
+        return this.Ok(response);
+    }*/
 }
