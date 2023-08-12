@@ -13,7 +13,7 @@ public class CreateProductCommandValidator : AbstractValidator<CreateProductComm
             .WithMessage("Product name cannot be empty");
         
         RuleFor(p => p.Name)
-            .MaximumLength(Name.MaxLength)
+            .MaximumLength(ProductName.MaxLength)
             .WithName("name_too_long")
             .WithMessage("Product name is too long");
         
@@ -28,7 +28,7 @@ public class CreateProductCommandValidator : AbstractValidator<CreateProductComm
             .WithMessage("Product description cannot be empty");
         
         RuleFor(p => p.Description)
-            .MaximumLength(Description.MaxLength)
+            .MaximumLength(ProductDescription.MaxLength)
             .WithName("description_too_long")
             .WithMessage("Product description is too long");
         

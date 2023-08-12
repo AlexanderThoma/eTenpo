@@ -12,24 +12,26 @@ public class CategoryConfiguration : IEntityTypeConfiguration<Category>
         builder.ToTable(TableNames.Categories);
         
         builder.HasKey(c => c.Id);
-        
-        builder.HasIndex(c => c.Name).IsUnique();
 
         builder.Ignore(x => x.DomainEvents);
         
         // DDD comment: length restrictions or other validations are done inside the value objects
         // and should not be verified here
         
-        // add conversion for value objects, because ef core cannot do the mapping by itself
-
-        builder.Property(c => c.Name)
-            .IsRequired()
-            .HasConversion(prop => prop.Value,
-                value => new CategoryName(value));
         
-        builder.Property(c => c.Description)
-            .HasConversion(prop => prop.Value,
-            value => new CategoryDescription(value));
+        builder.OwnsOne(c => c.Name, ownedNavigationBuilder =>
+        {
+            ownedNavigationBuilder.Property(n => n.Value)
+                .HasColumnName(nameof(Category.Name))
+                .IsRequired();
+
+            ownedNavigationBuilder.HasIndex(nameof(CategoryName.Value));
+        });
+        
+        builder
+            .OwnsOne(c => c.Description)
+            .Property(p => p.Value)
+            .HasColumnName(nameof(Category.Description));
 
         builder.Property(c => c.CreatedOnUtc).IsRequired();
         

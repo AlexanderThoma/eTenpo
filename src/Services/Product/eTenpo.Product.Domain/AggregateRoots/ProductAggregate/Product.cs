@@ -14,9 +14,9 @@ public class Product : AggregateRoot, IAuditable
     
     public Product(string name, decimal price, string description, Guid categoryId)
     {
-        this.Name = new Name(name);
+        this.ProductName = new ProductName(name);
         this.Price = new Price(price);
-        this.Description = new Description(description);
+        this.ProductDescription = new ProductDescription(description);
         this.AvailableStock = new Stock();
         this.CategoryId = categoryId;
         this.Category = null;
@@ -24,9 +24,9 @@ public class Product : AggregateRoot, IAuditable
         this.AddDomainEvent(new ProductCreatedEvent(this));
     }
 
-    public Name Name { get; private set; }
+    public ProductName ProductName { get; private set; }
     public Price Price { get; private set; }
-    public Description Description { get; private set; }
+    public ProductDescription ProductDescription { get; private set; }
     public Stock AvailableStock { get; private set; }
     public Guid CategoryId { get; private set; }
     public DateTime CreatedOnUtc { get; set; }
@@ -40,24 +40,24 @@ public class Product : AggregateRoot, IAuditable
         this.AddDomainEvent(new ProductDeletedEvent(this.Id));
     }
     
-    public void UpdateName(Name newName)
+    public void UpdateName(ProductName newProductName)
     {
-        if (this.Name == newName)
+        if (this.ProductName == newProductName)
         {
             return;
         }
         
-        this.Name = newName;
+        this.ProductName = newProductName;
     }
     
-    public void UpdateDescription(Description newDescription)
+    public void UpdateDescription(ProductDescription newProductDescription)
     {
-        if (this.Description == newDescription)
+        if (this.ProductDescription == newProductDescription)
         {
             return;
         }
         
-        this.Description = newDescription;
+        this.ProductDescription = newProductDescription;
     }
     
     public void UpdatePrice(Price newPrice)

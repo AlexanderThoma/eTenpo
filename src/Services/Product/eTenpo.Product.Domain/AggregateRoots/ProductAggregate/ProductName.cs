@@ -3,11 +3,11 @@ using eTenpo.Product.Domain.Exceptions;
 
 namespace eTenpo.Product.Domain.AggregateRoots.ProductAggregate;
 
-public class Name : ValueObject
+public class ProductName : ValueObject
 {
     public const int MaxLength = 100;
 
-    public Name(string value)
+    public ProductName(string value)
     {
         if (string.IsNullOrWhiteSpace(value))
         {

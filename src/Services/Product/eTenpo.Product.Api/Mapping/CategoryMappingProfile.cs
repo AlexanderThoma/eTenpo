@@ -28,7 +28,7 @@ public class CategoryMappingProfile : Profile
             .ForMember(command => command.Name,
                 expression => expression.MapFrom(x => x.Name))
             .ForMember(command => command.Description,
-                expression => expression.MapFrom(x => x.Description));
+                expression => expression.MapFrom(x => x.Description)).DisableCtorValidation();
         
         CreateMap<Category, UpdateCategoryCommandResponse>()
             .ForMember(command => command.Id,

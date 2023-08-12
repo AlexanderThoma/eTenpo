@@ -29,10 +29,10 @@ public class UpdateProductCommandHandler : ICommandHandler<UpdateProductCommand,
 
         await this.ValidateNameUniqueness(request.Name, cancellationToken, product);
 
-        product.UpdateName(new Name(request.Name));
+        product.UpdateName(new ProductName(request.Name));
         product.UpdatePrice(new Price(request.Price));
         product.ChangeCategory(request.CategoryId);
-        product.UpdateDescription(new Description(request.Description));
+        product.UpdateDescription(new ProductDescription(request.Description));
 
         await this.unitOfWork.SaveChangesAsync(cancellationToken);
         

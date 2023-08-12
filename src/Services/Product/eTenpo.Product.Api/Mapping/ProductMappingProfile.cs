@@ -29,11 +29,11 @@ public class ProductMappingProfile : Profile
         
         CreateMap<Domain.AggregateRoots.ProductAggregate.Product, CreateProductCommandResponse>()
             .ForMember(command => command.Name,
-                expression => expression.MapFrom(x => x.Name))
+                expression => expression.MapFrom(x => x.ProductName))
             .ForMember(command => command.Price,
                 expression => expression.MapFrom(x => x.Price))
             .ForMember(command => command.Description,
-                expression => expression.MapFrom(x => x.Description))
+                expression => expression.MapFrom(x => x.ProductDescription))
             .ForMember(command => command.AvailableStock,
                 expression => expression.MapFrom(x => x.AvailableStock))
             .ForMember(command => command.CategoryId,
@@ -55,11 +55,11 @@ public class ProductMappingProfile : Profile
         
         CreateMap<Domain.AggregateRoots.ProductAggregate.Product, GetAllProductsRequestResponse>()
             .ForMember(command => command.Name,
-                expression => expression.MapFrom(x => x.Name))
+                expression => expression.MapFrom(x => x.ProductName))
             .ForMember(command => command.Price,
                 expression => expression.MapFrom(x => x.Price))
             .ForMember(command => command.Description,
-                expression => expression.MapFrom(x => x.Description))
+                expression => expression.MapFrom(x => x.ProductDescription))
             .ForMember(command => command.AvailableStock,
                 expression => expression.MapFrom(x => x.AvailableStock))
             .ForMember(command => command.CategoryId,
@@ -67,11 +67,11 @@ public class ProductMappingProfile : Profile
         
         CreateMap<Domain.AggregateRoots.ProductAggregate.Product, GetSingleProductRequestResponse>()
             .ForMember(command => command.Name,
-                expression => expression.MapFrom(x => x.Name))
+                expression => expression.MapFrom(x => x.ProductName))
             .ForMember(command => command.Price,
                 expression => expression.MapFrom(x => x.Price))
             .ForMember(command => command.Description,
-                expression => expression.MapFrom(x => x.Description))
+                expression => expression.MapFrom(x => x.ProductDescription))
             .ForMember(command => command.AvailableStock,
                 expression => expression.MapFrom(x => x.AvailableStock))
             .ForMember(command => command.CategoryId,

@@ -32,7 +32,7 @@ public class UpdateCategoryCommandHandler : ICommandHandler<UpdateCategoryComman
         
         await this.unitOfWork.SaveChangesAsync(cancellationToken);
 
-        return new UpdateCategoryCommandResponse(request.Id);
+        return new UpdateCategoryCommandResponse(category.Id, category.Name.Value, category.Description.Value);
     }
 
     private async Task<Category> GetCategoryFromDatabase(UpdateCategoryCommand request, CancellationToken cancellationToken)

@@ -12,8 +12,6 @@ public class ProductConfiguration : IEntityTypeConfiguration<Domain.AggregateRoo
         builder.ToTable(TableNames.Products);
         
         builder.HasKey(c => c.Id);
-        
-        builder.HasIndex(c => c.Name).IsUnique();
 
         builder.Ignore(x => x.DomainEvents);
         
@@ -22,22 +20,30 @@ public class ProductConfiguration : IEntityTypeConfiguration<Domain.AggregateRoo
         
         // add conversion for value objects, because ef core cannot do the mapping by itself
 
-        builder.Property(c => c.Name)
-            .IsRequired()
-            .HasConversion(prop => prop.Value,
-                value => new Name(value));
+        builder.OwnsOne(c => c.ProductName, ownedNavigationBuilder =>
+        {
+            ownedNavigationBuilder.Property(n => n.Value)
+                .HasColumnName(nameof(Domain.AggregateRoots.ProductAggregate.Product.ProductName))
+                .IsRequired();
+
+            ownedNavigationBuilder.HasIndex(nameof(ProductName.Value));
+        });
         
-        builder.Property(c => c.Price)
-            .HasConversion(prop => prop.Value,
-            value => new Price(value));
+        builder
+            .OwnsOne(c => c.ProductDescription)
+            .Property(p => p.Value)
+            .HasColumnName(nameof(Domain.AggregateRoots.ProductAggregate.Product.ProductDescription));
         
-        builder.Property(c => c.Description)
-            .HasConversion(prop => prop.Value,
-            value => new Description(value));
+        builder
+            .OwnsOne(c => c.Price)
+            .Property(p => p.Value)
+            .HasPrecision(19, 4)
+            .HasColumnName(nameof(Domain.AggregateRoots.ProductAggregate.Product.Price));
         
-        builder.Property(c => c.AvailableStock)
-            .HasConversion(prop => prop.Value,
-            value => new Stock(value));
+        builder
+            .OwnsOne(c => c.AvailableStock)
+            .Property(p => p.Value)
+            .HasColumnName(nameof(Domain.AggregateRoots.ProductAggregate.Product.AvailableStock));
         
         builder.HasOne(a => a.Category)
             .WithMany(x => x.Products)
