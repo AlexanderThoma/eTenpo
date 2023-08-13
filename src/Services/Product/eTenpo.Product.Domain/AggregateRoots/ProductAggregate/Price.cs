@@ -20,6 +20,11 @@ public class Price : ValueObject
 
     public decimal Value { get; init; }
     
+    public static implicit operator decimal(Price price)
+    {
+        return price.Value;
+    }
+    
     protected override IEnumerable<object> GetEqualityComponents()
     {
         // round for comparison as only two digits are relevant

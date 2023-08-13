@@ -24,6 +24,11 @@ public class ProductDescription : ValueObject
     }
     
     public string Value { get; init; }
+    
+    public static implicit operator string(ProductDescription description)
+    {
+        return description.Value;
+    }
 
     protected override IEnumerable<object> GetEqualityComponents()
     {

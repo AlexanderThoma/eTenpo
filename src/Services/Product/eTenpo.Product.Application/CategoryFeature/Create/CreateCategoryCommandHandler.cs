@@ -1,4 +1,3 @@
-using AutoMapper;
 using eTenpo.Product.Application.CommandQueryAbstractions;
 using eTenpo.Product.Domain.AggregateRoots.CategoryAggregate;
 using eTenpo.Product.Domain.Contracts;
@@ -12,14 +11,12 @@ public class CreateCategoryCommandHandler : ICommandHandler<CreateCategoryComman
     private readonly ICategoryRepository repository;
     private readonly IUnitOfWork unitOfWork;
     private readonly ILogger<CreateCategoryCommandHandler> logger;
-    private readonly IMapper mapper;
 
-    public CreateCategoryCommandHandler(ICategoryRepository repository, IUnitOfWork unitOfWork, ILogger<CreateCategoryCommandHandler> logger, IMapper mapper)
+    public CreateCategoryCommandHandler(ICategoryRepository repository, IUnitOfWork unitOfWork, ILogger<CreateCategoryCommandHandler> logger)
     {
         this.repository = repository;
         this.unitOfWork = unitOfWork;
         this.logger = logger;
-        this.mapper = mapper;
     }
     
     public async Task<CreateCategoryCommandResponse> Handle(CreateCategoryCommand request, CancellationToken cancellationToken)
@@ -37,7 +34,7 @@ public class CreateCategoryCommandHandler : ICommandHandler<CreateCategoryComman
         
         await this.unitOfWork.SaveChangesAsync(cancellationToken);
 
-        return this.mapper.Map<CreateCategoryCommandResponse>(category);
+        return new CreateCategoryCommandResponse(category.Id, category.Name, category.Description);
     }
     
     private async Task ValidateNameUniqueness(string newName, CancellationToken cancellationToken)

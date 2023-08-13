@@ -19,6 +19,11 @@ public class Stock : ValueObject
     }
     
     public int Value { get; init; }
+    
+    public static implicit operator int(Stock stock)
+    {
+        return stock.Value;
+    }
 
     public Stock Add(int amount)
     {

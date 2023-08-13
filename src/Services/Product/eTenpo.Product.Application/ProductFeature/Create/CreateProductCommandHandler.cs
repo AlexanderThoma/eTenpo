@@ -1,4 +1,3 @@
-using AutoMapper;
 using eTenpo.Product.Application.CommandQueryAbstractions;
 using eTenpo.Product.Domain.Contracts;
 using eTenpo.Product.Domain.Exceptions;
@@ -12,16 +11,16 @@ public class CreateProductCommandHandler : ICommandHandler<CreateProductCommand,
     private readonly ICategoryRepository categoryRepository;
     private readonly IUnitOfWork unitOfWork;
     private readonly ILogger<CreateProductCommandHandler> logger;
-    private readonly IMapper mapper;
 
-    public CreateProductCommandHandler(IProductRepository repository, ICategoryRepository categoryRepository,
-        IUnitOfWork unitOfWork, ILogger<CreateProductCommandHandler> logger, IMapper mapper)
+    public CreateProductCommandHandler(IProductRepository repository,
+        ICategoryRepository categoryRepository,
+        IUnitOfWork unitOfWork,
+        ILogger<CreateProductCommandHandler> logger)
     {
         this.repository = repository;
         this.categoryRepository = categoryRepository;
         this.unitOfWork = unitOfWork;
         this.logger = logger;
-        this.mapper = mapper;
     }
 
     public async Task<CreateProductCommandResponse> Handle(CreateProductCommand request, CancellationToken cancellationToken)
@@ -43,8 +42,9 @@ public class CreateProductCommandHandler : ICommandHandler<CreateProductCommand,
         this.logger.LogInformation("Add the new product to the database");
         
         await this.unitOfWork.SaveChangesAsync(cancellationToken);
-        
-        return this.mapper.Map<CreateProductCommandResponse>(product);
+
+        return new CreateProductCommandResponse(product.Id, product.ProductName, product.Price,
+            product.ProductDescription, product.AvailableStock, product.CategoryId);
     }
     
     private async Task ValidateCategoryId(Guid categoryId)

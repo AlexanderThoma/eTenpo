@@ -1,5 +1,3 @@
-using AutoMapper;
-using eTenpo.Product.Api.Requests.Category;
 using eTenpo.Product.Api.Requests.Product;
 using eTenpo.Product.Application.ProductFeature.Create;
 using eTenpo.Product.Application.ProductFeature.Delete;
@@ -14,13 +12,11 @@ namespace eTenpo.Product.Api.Controllers;
 public class ProductsController : BaseApiController
 {
     private readonly IMediator mediator;
-    private readonly IMapper mapper;
     private readonly ILogger<ProductsController> logger;
 
-    public ProductsController(IMediator mediator, IMapper mapper, ILogger<ProductsController> logger)
+    public ProductsController(IMediator mediator, ILogger<ProductsController> logger)
     {
         this.mediator = mediator;
-        this.mapper = mapper;
         this.logger = logger;
     }
 
@@ -31,8 +27,13 @@ public class ProductsController : BaseApiController
     {
         this.logger.LogInformation("The create endpoint was triggered");
         this.logger.LogDebug("With the parameter {@Parameter}", request);
-        
-        var command = this.mapper.Map<CreateProductCommand>(request);
+
+        var command = new CreateProductCommand(
+            request.Name,
+            request.Price,
+            request.Description,
+            request.AvailableStock,
+            request.CategoryId);
         
         var response = await this.mediator.Send(command);
 
@@ -70,8 +71,8 @@ public class ProductsController : BaseApiController
     {
         this.logger.LogInformation("The update endpoint was triggered");
         this.logger.LogDebug("With id {Id} and parameter {@Parameter}", id, request);
-        
-        var command = this.mapper.Map<UpdateProductCommand>(request, options => options.AfterMap((_, dest) => dest.Id = id));
+
+        var command = new UpdateProductCommand(id, request.Name, request.Price, request.Description, request.CategoryId);
 
         var response = await this.mediator.Send(command);
 

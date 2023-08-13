@@ -35,8 +35,13 @@ public class UpdateProductCommandHandler : ICommandHandler<UpdateProductCommand,
         product.UpdateDescription(new ProductDescription(request.Description));
 
         await this.unitOfWork.SaveChangesAsync(cancellationToken);
-        
-        return new UpdateProductCommandResponse(product.Id);
+
+        return new UpdateProductCommandResponse(product.Id, 
+            product.ProductName, 
+            product.Price,
+            product.ProductDescription, 
+            product.AvailableStock,
+            product.CategoryId);
     }
 
     private async Task ValidateNameUniqueness(string newProductName, CancellationToken cancellationToken,

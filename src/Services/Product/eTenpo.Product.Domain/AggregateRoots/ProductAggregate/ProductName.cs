@@ -25,6 +25,11 @@ public class ProductName : ValueObject
 
     public string Value { get; init; }
 
+    public static implicit operator string(ProductName name)
+    {
+        return name.Value;
+    }
+    
     protected override IEnumerable<object> GetEqualityComponents()
     {
         yield return this.Value.ToLower();

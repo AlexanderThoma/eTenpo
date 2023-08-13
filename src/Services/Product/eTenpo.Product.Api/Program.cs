@@ -64,7 +64,6 @@ builder.Services.AddEndpointsApiExplorer();
 
 
 builder.Services.AddQuartzServices();
-builder.Services.AddAutoMapper(typeof(Program).Assembly);
 
 builder.Services.AddApiVersioning(options =>
 {

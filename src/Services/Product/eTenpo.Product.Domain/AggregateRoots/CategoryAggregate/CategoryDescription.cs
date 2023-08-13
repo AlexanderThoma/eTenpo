@@ -24,6 +24,11 @@ public class CategoryDescription : ValueObject
     }
     
     public string Value { get; init; }
+    
+    public static implicit operator string(CategoryDescription categoryName)
+    {
+        return categoryName.Value;
+    }
 
     protected override IEnumerable<object> GetEqualityComponents()
     {

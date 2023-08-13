@@ -1,4 +1,3 @@
-using AutoMapper;
 using eTenpo.Product.Api.Requests.Category;
 using eTenpo.Product.Application.CategoryFeature.Create;
 using eTenpo.Product.Application.CategoryFeature.Delete;
@@ -14,13 +13,11 @@ namespace eTenpo.Product.Api.Controllers;
 public class CategoriesController : BaseApiController
 {
     private readonly IMediator mediator;
-    private readonly IMapper mapper;
     private readonly ILogger<CategoriesController> logger;
 
-    public CategoriesController(IMediator mediator, IMapper mapper, ILogger<CategoriesController> logger)
+    public CategoriesController(IMediator mediator, ILogger<CategoriesController> logger)
     {
         this.mediator = mediator;
-        this.mapper = mapper;
         this.logger = logger;
     }
     
@@ -31,8 +28,8 @@ public class CategoriesController : BaseApiController
     {
         this.logger.LogInformation("The create endpoint was triggered");
         this.logger.LogDebug("With the parameter {@Parameter}", request);
-        
-        var command = this.mapper.Map<CreateCategoryCommand>(request);
+
+        var command = new CreateCategoryCommand(request.Name, request.Description);
         
         var response = await this.mediator.Send(command);
 
@@ -70,8 +67,8 @@ public class CategoriesController : BaseApiController
     {
         this.logger.LogInformation("The update endpoint was triggered");
         this.logger.LogDebug("With id {Id} and parameter {@Parameter}", id, request);
-        
-        var command = this.mapper.Map<UpdateCategoryCommand>(request, options => options.AfterMap((_, dest) => dest.Id = id));
+
+        var command = new UpdateCategoryCommand(id, request.Name, request.Description);
 
         var response = await this.mediator.Send(command);
 
