@@ -46,4 +46,8 @@
       <ProjectReference Include="..\Infrastructure\Infrastructure.csproj" />
     </ItemGroup>
 
+  <ItemGroup>
+    <InternalsVisibleTo Include="Product.Test" />
+  </ItemGroup>
+
 </Project>

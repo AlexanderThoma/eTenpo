@@ -174,3 +174,6 @@ app.MapHealthChecks("/healthz/readiness", new HealthCheckOptions
 });
 
 app.Run();
+
+// used for testing purposes
+public partial class Program { }
