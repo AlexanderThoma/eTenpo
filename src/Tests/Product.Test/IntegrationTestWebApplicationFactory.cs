@@ -1,4 +1,5 @@
 ﻿using DotNet.Testcontainers;
+using Ductus.FluentDocker.Services;
 using eTenpo.Product.Infrastructure;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
@@ -11,11 +12,19 @@ namespace Product.Test;
 
 public class IntegrationTestWebApplicationFactory : WebApplicationFactory<Program>, IAsyncLifetime
 {
-    private readonly MsSqlContainer sqlContainer =
-        new(new MsSqlConfiguration("db", "sa", "!Password123"), ConsoleLogger.Instance);
-
+    private readonly MsSqlContainer sqlContainer;
+    protected IHostService? DockerHost;
+    
+    public IntegrationTestWebApplicationFactory()
+    {
+        EnsureDockerHost();
+        
+        sqlContainer = new(new MsSqlConfiguration("db", "sa", "!Password123"), ConsoleLogger.Instance);
+    }
+    
     protected override void ConfigureWebHost(IWebHostBuilder builder)
     {
+        
         builder.ConfigureTestServices(services =>
         {
             var descriptor =
@@ -41,5 +50,44 @@ public class IntegrationTestWebApplicationFactory : WebApplicationFactory<Progra
     public new async Task DisposeAsync()
     {
         await sqlContainer.StopAsync();
+    }
+
+    private void EnsureDockerHost()
+    {
+        var loopCount = 0;
+        while (true)
+        {
+            if (DockerHost?.State == ServiceRunningState.Running)
+            {
+                return;
+            }
+
+            if (loopCount > 5)
+            {
+                throw new Exception("EnsureDockerHost was not successful");
+            }
+
+            var hosts = new Hosts().Discover();
+            DockerHost = hosts.FirstOrDefault(x => x.IsNative) ?? hosts.FirstOrDefault(x => x.Name == "default");
+
+            if (DockerHost is not null)
+            {
+                if (DockerHost.State is not ServiceRunningState.Running) DockerHost.Start();
+
+                return;
+            }
+
+            if (hosts.Count > 0)
+            {
+                DockerHost = hosts.First();
+            }
+
+            if (DockerHost is not null)
+            {
+                return;
+            }
+
+            loopCount++;
+        }
     }
 }

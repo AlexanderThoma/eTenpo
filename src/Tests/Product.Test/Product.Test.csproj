@@ -12,6 +12,7 @@
     </PropertyGroup>
 
     <ItemGroup>
+        <PackageReference Include="Ductus.FluentDocker.XUnit" Version="2.10.59" />
         <PackageReference Include="Microsoft.AspNetCore.Mvc.Testing" Version="7.0.10" />
         <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.7.0" />
         <PackageReference Include="Testcontainers.MsSql" Version="3.4.0" />

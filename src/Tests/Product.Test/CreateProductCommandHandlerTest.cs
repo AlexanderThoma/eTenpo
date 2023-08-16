@@ -9,7 +9,7 @@ public class CreateProductCommandHandlerTest : BaseTestFixture
     }
 
     [Fact]
-    public async Task ShouldAddNewProductToDatabase()
+    public async Task ShouldAddNewCategoryToDatabase()
     {
         // Arrange
         var command = new CreateCategoryCommand("FirstProduct", "FirstProductDescription");
