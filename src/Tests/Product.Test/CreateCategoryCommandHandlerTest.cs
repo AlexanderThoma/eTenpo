@@ -2,9 +2,9 @@ using eTenpo.Product.Application.CategoryFeature.Create;
 
 namespace Product.Test;
 
-public class CreateProductCommandHandlerTest : BaseTestFixture
+public class CreateCategoryCommandHandlerTest : BaseTestFixture
 {
-    public CreateProductCommandHandlerTest(IntegrationTestWebApplicationFactory factory) : base(factory)
+    public CreateCategoryCommandHandlerTest(IntegrationTestWebApplicationFactory factory) : base(factory)
     {
     }
 

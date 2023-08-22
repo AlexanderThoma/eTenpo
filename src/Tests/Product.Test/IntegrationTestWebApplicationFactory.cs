@@ -1,25 +1,25 @@
-﻿using DotNet.Testcontainers;
-using Ductus.FluentDocker.Services;
+﻿using Ductus.FluentDocker.Services;
 using eTenpo.Product.Infrastructure;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.AspNetCore.TestHost;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
-using Testcontainers.MsSql;
+using Testcontainers.SqlEdge;
 
 namespace Product.Test;
 
 public class IntegrationTestWebApplicationFactory : WebApplicationFactory<Program>, IAsyncLifetime
 {
-    private readonly MsSqlContainer sqlContainer;
-    protected IHostService? DockerHost;
+    private readonly SqlEdgeContainer sqlContainer;
+    protected IHostService? DockerHost; 
     
     public IntegrationTestWebApplicationFactory()
     {
         EnsureDockerHost();
-        
-        sqlContainer = new(new MsSqlConfiguration("db", "sa", "!Password123"), ConsoleLogger.Instance);
+
+        // use SQL edge container for local development on apple silicon and windows
+        sqlContainer = new SqlEdgeBuilder().Build();
     }
     
     protected override void ConfigureWebHost(IWebHostBuilder builder)
