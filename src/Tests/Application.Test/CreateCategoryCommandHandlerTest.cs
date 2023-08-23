@@ -1,8 +1,10 @@
 using eTenpo.Product.Application.CategoryFeature.Create;
+using Shared;
+using Xunit;
 
-namespace Product.Test;
+namespace Product.Application.Test;
 
-public class CreateCategoryCommandHandlerTest : BaseTestFixture
+public class CreateCategoryCommandHandlerTest : BaseApplicationTestFixture
 {
     public CreateCategoryCommandHandlerTest(IntegrationTestWebApplicationFactory factory) : base(factory)
     {

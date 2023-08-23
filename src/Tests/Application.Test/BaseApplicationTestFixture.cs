@@ -1,14 +1,16 @@
 ﻿using MediatR;
 using Microsoft.Extensions.DependencyInjection;
+using Shared;
+using Xunit;
 
-namespace Product.Test;
+namespace Product.Application.Test;
 
-public abstract class BaseTestFixture : IClassFixture<IntegrationTestWebApplicationFactory>
+public abstract class BaseApplicationTestFixture : IClassFixture<IntegrationTestWebApplicationFactory>
 {
     private readonly IServiceScope scope;
     protected readonly ISender Sender;
     
-    protected BaseTestFixture(IntegrationTestWebApplicationFactory factory)
+    protected BaseApplicationTestFixture(IntegrationTestWebApplicationFactory factory)
     {
         scope = factory.Services.CreateScope();
         Sender = scope.ServiceProvider.GetRequiredService<ISender>();

@@ -6,13 +6,14 @@ using Microsoft.AspNetCore.TestHost;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Testcontainers.SqlEdge;
+using Xunit;
 
-namespace Product.Test;
+namespace Shared;
 
-public class IntegrationTestWebApplicationFactory : WebApplicationFactory<Program>, IAsyncLifetime
+public sealed class IntegrationTestWebApplicationFactory : WebApplicationFactory<Program>, IAsyncLifetime
 {
     private readonly SqlEdgeContainer sqlContainer;
-    protected IHostService? DockerHost; 
+    private IHostService? dockerHost; 
     
     public IntegrationTestWebApplicationFactory()
     {
@@ -57,7 +58,7 @@ public class IntegrationTestWebApplicationFactory : WebApplicationFactory<Progra
         var loopCount = 0;
         while (true)
         {
-            if (DockerHost?.State == ServiceRunningState.Running)
+            if (dockerHost?.State == ServiceRunningState.Running)
             {
                 return;
             }
@@ -68,21 +69,21 @@ public class IntegrationTestWebApplicationFactory : WebApplicationFactory<Progra
             }
 
             var hosts = new Hosts().Discover();
-            DockerHost = hosts.FirstOrDefault(x => x.IsNative) ?? hosts.FirstOrDefault(x => x.Name == "default");
+            dockerHost = hosts.FirstOrDefault(x => x.IsNative) ?? hosts.FirstOrDefault(x => x.Name == "default");
 
-            if (DockerHost is not null)
+            if (dockerHost is not null)
             {
-                if (DockerHost.State is not ServiceRunningState.Running) DockerHost.Start();
+                if (dockerHost.State is not ServiceRunningState.Running) dockerHost.Start();
 
                 return;
             }
 
             if (hosts.Count > 0)
             {
-                DockerHost = hosts.First();
+                dockerHost = hosts.First();
             }
 
-            if (DockerHost is not null)
+            if (dockerHost is not null)
             {
                 return;
             }
