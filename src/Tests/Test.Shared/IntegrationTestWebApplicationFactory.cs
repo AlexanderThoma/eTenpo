@@ -5,22 +5,20 @@ using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.AspNetCore.TestHost;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
-using Testcontainers.SqlEdge;
-using Xunit;
+using Testcontainers.MsSql;
 
 namespace Shared;
 
 public sealed class IntegrationTestWebApplicationFactory : WebApplicationFactory<Program>, IAsyncLifetime
 {
-    private readonly SqlEdgeContainer sqlContainer;
-    private IHostService? dockerHost; 
+    private readonly MsSqlContainer sqlContainer;
+    protected IHostService? dockerHost; 
     
     public IntegrationTestWebApplicationFactory()
     {
         EnsureDockerHost();
-
-        // use SQL edge container for local development on apple silicon and windows
-        sqlContainer = new SqlEdgeBuilder().Build();
+        
+        sqlContainer = new MsSqlBuilder().Build();
     }
     
     protected override void ConfigureWebHost(IWebHostBuilder builder)
