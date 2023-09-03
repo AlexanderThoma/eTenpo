@@ -1,10 +1,10 @@
-﻿using MediatR;
-using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.DependencyInjection;
 using Shared;
 using Xunit;
 
-namespace Product.Api.Test;
+namespace Product.Api.Test.Base;
 
+// TODO: write base class for tests using http-client
 public abstract class BaseApiTestFixture : IClassFixture<IntegrationTestWebApplicationFactory>
 {
     private readonly IServiceScope scope;
