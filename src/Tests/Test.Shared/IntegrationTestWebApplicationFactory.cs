@@ -13,7 +13,7 @@ namespace Shared;
 public sealed class IntegrationTestWebApplicationFactory : WebApplicationFactory<Program>, IAsyncLifetime
 {
     private readonly MsSqlContainer sqlContainer;
-    protected IHostService? dockerHost; 
+    private IHostService? dockerHost; 
     
     public IntegrationTestWebApplicationFactory()
     {
