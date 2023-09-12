@@ -4,6 +4,7 @@
       <RootNamespace>eTenpo.Product.Api</RootNamespace>
       <TargetFramework>net7.0</TargetFramework>
       <Nullable>enable</Nullable>
+      <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
       <ImplicitUsings>enable</ImplicitUsings>
       <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
       <UserSecretsId>266fcdb9-4349-48d3-9640-77fd6708141e</UserSecretsId>

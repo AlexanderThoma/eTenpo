@@ -5,6 +5,7 @@
         <RootNamespace>Product.Api.Test</RootNamespace>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
+        <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
         <IsPackable>false</IsPackable>
         <IsTestProject>true</IsTestProject>
         <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
