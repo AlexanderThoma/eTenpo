@@ -8,29 +8,21 @@ using Quartz;
 
 namespace eTenpo.Product.Infrastructure.BackgroundJobs;
 
-
 // TODO: in-process handling of outbox messages (to be reimplemented in Azure functions)
 [DisallowConcurrentExecution]
-public class ProcessOutboxMessagesJob : IJob
+public class ProcessOutboxMessagesJob(
+    ApplicationDbContext dbContext,
+    IPublisher publisher,
+    ILogger<ProcessOutboxMessagesJob> logger)
+    : IJob
 {
-    private readonly ApplicationDbContext dbContext;
-    private readonly IPublisher publisher;
-    private readonly ILogger<ProcessOutboxMessagesJob> logger;
-
-    public ProcessOutboxMessagesJob(ApplicationDbContext dbContext, IPublisher publisher, ILogger<ProcessOutboxMessagesJob> logger)
-    {
-        this.dbContext = dbContext;
-        this.publisher = publisher;
-        this.logger = logger;
-    }
-
     public async Task Execute(IJobExecutionContext context)
     {
         var messages = await dbContext.Set<OutboxMessage>().Where(x => x.ProcessedOnUtc == null).OrderBy(x => x.OccurredOnUtc).Take(20).ToListAsync();
 
-        if (!messages.Any())
+        if (messages.Count == 0)
         {
-            //this.logger.LogInformation("Message queue is empty");
+            logger.LogInformation("Message queue is empty");
             
             return;
         }
@@ -41,7 +33,7 @@ public class ProcessOutboxMessagesJob : IJob
 
             if (domainEvent is null)
             {
-                this.logger.LogWarning("An empty domain event was found during processing. OutboxMessage: {@Message}", outboxMessage);
+                logger.LogWarning("An empty domain event was found during processing. OutboxMessage: {@Message}", outboxMessage);
                 continue;
             }
 
@@ -52,7 +44,7 @@ public class ProcessOutboxMessagesJob : IJob
             }
             catch (Exception exception)
             {
-                this.logger.LogError("An error {@Error} occurred during the processing of outbox messages", exception);
+                logger.LogError("An error {@Error} occurred during the processing of outbox messages", exception);
                 
                 outboxMessage.ProcessedOnUtc = null;
                 outboxMessage.Error = exception.Message;

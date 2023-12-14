@@ -24,7 +24,6 @@ public sealed class IntegrationTestWebApplicationFactory : WebApplicationFactory
     
     protected override void ConfigureWebHost(IWebHostBuilder builder)
     {
-        
         builder.ConfigureTestServices(services =>
         {
             var descriptor =

@@ -5,21 +5,15 @@ using Microsoft.Extensions.Logging;
 
 namespace eTenpo.Product.Application.CategoryFeature.Read.Single;
 
-public class GetSingleCategoryRequestHandler : IQueryHandler<GetSingleCategoryRequest, GetSingleCategoryRequestResponse>
+public class GetSingleCategoryRequestHandler(
+    ICategoryRepository repository,
+    ILogger<GetSingleCategoryRequestHandler> logger)
+    : IQueryHandler<GetSingleCategoryRequest, GetSingleCategoryRequestResponse>
 {
-    private readonly ICategoryRepository repository;
-    private readonly ILogger<GetSingleCategoryRequestHandler> logger;
-
-    public GetSingleCategoryRequestHandler(ICategoryRepository repository, ILogger<GetSingleCategoryRequestHandler> logger)
-    {
-        this.repository = repository;
-        this.logger = logger;
-    }
-    
     public async Task<GetSingleCategoryRequestResponse> Handle(GetSingleCategoryRequest request, CancellationToken cancellationToken)
     {
-        this.logger.LogInformation("Get category with id {Id} from database", request.Id);
-        var category = await this.repository.FindById(request.Id, cancellationToken);
+        logger.LogInformation("Get category with id {Id} from database", request.Id);
+        var category = await repository.FindById(request.Id, cancellationToken);
 
         if (category is null)
         {

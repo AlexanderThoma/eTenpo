@@ -2,6 +2,4 @@
 
 namespace eTenpo.Product.Application.CommandQueryAbstractions;
 
-public interface IQuery<out TResponse> : IRequest<TResponse>
-{
-}
+public interface IQuery<out TResponse> : IRequest<TResponse>;

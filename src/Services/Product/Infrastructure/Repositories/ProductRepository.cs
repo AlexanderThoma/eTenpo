@@ -4,12 +4,9 @@ using Microsoft.EntityFrameworkCore;
 
 namespace eTenpo.Product.Infrastructure.Repositories;
 
-public class ProductRepository : BaseRepository<Domain.AggregateRoots.ProductAggregate.Product>, IProductRepository
+public class ProductRepository(ApplicationDbContext dbContext)
+    : BaseRepository<Domain.AggregateRoots.ProductAggregate.Product>(dbContext), IProductRepository
 {
-    public ProductRepository(ApplicationDbContext dbContext) : base(dbContext)
-    {
-    }
-
     public async Task<Domain.AggregateRoots.ProductAggregate.Product?> FindByName(string name,
         CancellationToken cancellationToken = default) =>
         await this.ApplySpecification(new ProductByNameSpec(name))

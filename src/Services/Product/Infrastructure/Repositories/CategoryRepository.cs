@@ -5,12 +5,9 @@ using Microsoft.EntityFrameworkCore;
 
 namespace eTenpo.Product.Infrastructure.Repositories;
 
-public class CategoryRepository : BaseRepository<Category>, ICategoryRepository
+public class CategoryRepository(ApplicationDbContext dbContext)
+    : BaseRepository<Category>(dbContext), ICategoryRepository
 {
-    public CategoryRepository(ApplicationDbContext dbContext) : base(dbContext)
-    {
-    }
-
     public async Task<bool> Exists(Guid id) => await this.DbSet.AnyAsync(x => x.Id == id);
     
     public async Task<Category?> FindById(Guid id, CancellationToken cancellationToken = default) => await this.ApplySpecification(new CategoryByIdSpec(id))

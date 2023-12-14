@@ -14,15 +14,9 @@ public class EventTypeEnricher : ILogEventEnricher
 
     public void Enrich(LogEvent logEvent, ILogEventPropertyFactory propertyFactory)
     {
-        if (logEvent is null)
-        {
-            throw new ArgumentNullException(nameof(logEvent));
-        }
+        ArgumentNullException.ThrowIfNull(logEvent);
 
-        if (propertyFactory is null)
-        {
-            throw new ArgumentNullException(nameof(propertyFactory));
-        }
+        ArgumentNullException.ThrowIfNull(propertyFactory);
 
         var murmurHash = MurmurHash.Create32();
         var bytes = Encoding.UTF8.GetBytes(logEvent.MessageTemplate.Text);

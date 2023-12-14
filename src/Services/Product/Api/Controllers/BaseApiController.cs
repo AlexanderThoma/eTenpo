@@ -8,4 +8,4 @@ namespace eTenpo.Product.Api.Controllers;
 [ProducesResponseType(StatusCodes.Status401Unauthorized)]
 [ProducesResponseType(StatusCodes.Status403Forbidden)]
 [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-public class BaseApiController : ControllerBase { }
+public class BaseApiController : ControllerBase;

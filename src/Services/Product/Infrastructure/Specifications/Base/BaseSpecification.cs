@@ -3,17 +3,16 @@ using eTenpo.Product.Domain.Common;
 
 namespace eTenpo.Product.Infrastructure.Specifications.Base;
 
-public abstract class BaseSpecification<T> where T : AggregateRoot
+public abstract class BaseSpecification<T>(Expression<Func<T, bool>>? filter)
+    where T : AggregateRoot
 {
-    public BaseSpecification(Expression<Func<T, bool>>? filter) => this.FilterCondition = filter;
+    public bool IsSplitQuery { get; private set; }
+    
+    public bool AsNoTracking { get; private set; }
+    
+    public Expression<Func<T, bool>>? FilterCondition { get; } = filter;
 
-    public bool IsSplitQuery { get; private set; } = false;
-    
-    public bool AsNoTracking { get; private set; } = false;
-    
-    public Expression<Func<T, bool>>? FilterCondition { get; init; }
-    
-    public List<Expression<Func<T, object>>> Includes { get; } = new();
+    public List<Expression<Func<T, object>>> Includes { get; } = [];
     
     public Expression<Func<T, object>>? OrderBy { get; private set; }
     

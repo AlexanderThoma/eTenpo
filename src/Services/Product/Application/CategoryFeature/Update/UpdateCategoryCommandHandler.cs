@@ -6,39 +6,31 @@ using Microsoft.Extensions.Logging;
 
 namespace eTenpo.Product.Application.CategoryFeature.Update;
 
-public class UpdateCategoryCommandHandler : ICommandHandler<UpdateCategoryCommand, UpdateCategoryCommandResponse>
+public class UpdateCategoryCommandHandler(
+    ICategoryRepository repository,
+    IUnitOfWork unitOfWork,
+    ILogger<UpdateCategoryCommandHandler> logger)
+    : ICommandHandler<UpdateCategoryCommand, UpdateCategoryCommandResponse>
 {
-    private readonly ICategoryRepository repository;
-    private readonly IUnitOfWork unitOfWork;
-    private readonly ILogger<UpdateCategoryCommandHandler> logger;
-
-    public UpdateCategoryCommandHandler(ICategoryRepository repository, IUnitOfWork unitOfWork,
-        ILogger<UpdateCategoryCommandHandler> logger)
-    {
-        this.repository = repository;
-        this.unitOfWork = unitOfWork;
-        this.logger = logger;
-    }
-
     public async Task<UpdateCategoryCommandResponse> Handle(UpdateCategoryCommand request,
         CancellationToken cancellationToken)
     {
         var category = await GetCategoryFromDatabase(request, cancellationToken);
 
-        await this.ValidateNameUniqueness(request.Name, cancellationToken, category);
+        await ValidateNameUniqueness(request.Name, cancellationToken, category);
 
         category.UpdateName(new CategoryName(request.Name));
         category.UpdateDescription(new CategoryDescription(request.Description));
         
-        await this.unitOfWork.SaveChangesAsync(cancellationToken);
+        await unitOfWork.SaveChangesAsync(cancellationToken);
 
         return new UpdateCategoryCommandResponse(category.Id, category.Name.Value, category.Description.Value);
     }
 
     private async Task<Category> GetCategoryFromDatabase(UpdateCategoryCommand request, CancellationToken cancellationToken)
     {
-        this.logger.LogInformation("Get category with id {Id} from database", request.Id);
-        var category = await this.repository.FindById(request.Id, cancellationToken);
+        logger.LogInformation("Get category with id {Id} from database", request.Id);
+        var category = await repository.FindById(request.Id, cancellationToken);
 
         if (category is null)
         {
@@ -54,9 +46,9 @@ public class UpdateCategoryCommandHandler : ICommandHandler<UpdateCategoryComman
         CancellationToken cancellationToken,
         Category category)
     {
-        this.logger.LogInformation("Validate product name uniqueness");
+        logger.LogInformation("Validate product name uniqueness");
 
-        var categoryName = await this.repository.FindByName(newCategoryName, cancellationToken);
+        var categoryName = await repository.FindByName(newCategoryName, cancellationToken);
 
         if (categoryName is not null && categoryName.Id != category.Id)
         {

@@ -5,14 +5,10 @@ using Xunit;
 namespace Product.Api.Test.Base;
 
 // TODO: write base class for tests using http-client
-public abstract class BaseApiTestFixture : IClassFixture<IntegrationTestWebApplicationFactory>
+public abstract class BaseApiTestFixture(IntegrationTestWebApplicationFactory factory)
+    : IClassFixture<IntegrationTestWebApplicationFactory>
 {
-    private readonly IServiceScope scope;
+    private readonly IServiceScope scope = factory.Services.CreateScope();
     //protected readonly Ihttp Sender;
-    
-    protected BaseApiTestFixture(IntegrationTestWebApplicationFactory factory)
-    {
-        scope = factory.Services.CreateScope();
-        //Sender = scope.ServiceProvider.GetRequiredService<ISender>();
-    }
+    //Sender = scope.ServiceProvider.GetRequiredService<ISender>();
 }

@@ -9,24 +9,15 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace eTenpo.Product.Api.Controllers;
 [Asp.Versioning.ApiVersion("1.0")]
-public class ProductsController : BaseApiController
+public class ProductsController(IMediator mediator, ILogger<ProductsController> logger) : BaseApiController
 {
-    private readonly IMediator mediator;
-    private readonly ILogger<ProductsController> logger;
-
-    public ProductsController(IMediator mediator, ILogger<ProductsController> logger)
-    {
-        this.mediator = mediator;
-        this.logger = logger;
-    }
-
     [HttpPost]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<ActionResult<CreateProductCommandResponse>> Create([FromBody] CreateProductRequest request)
     {
-        this.logger.LogInformation("The create endpoint was triggered");
-        this.logger.LogDebug("With the parameter {@Parameter}", request);
+        logger.LogInformation("The create endpoint was triggered");
+        logger.LogDebug("With the parameter {@Parameter}", request);
 
         var command = new CreateProductCommand(
             request.Name,
@@ -35,21 +26,21 @@ public class ProductsController : BaseApiController
             request.AvailableStock,
             request.CategoryId);
         
-        var response = await this.mediator.Send(command);
+        var response = await mediator.Send(command);
 
-        this.logger.LogInformation("The product was created successfully");
-        this.logger.LogDebug("Returning with the created product {@Product}", response);
+        logger.LogInformation("The product was created successfully");
+        logger.LogDebug("Returning with the created product {@Product}", response);
         
-        return this.CreatedAtAction(nameof(GetById), new { id = response.Id }, response);
+        return CreatedAtAction(nameof(GetById), new { id = response.Id }, response);
     }
     
     [HttpGet]
     [ProducesResponseType(StatusCodes.Status200OK)]
     public async Task<ActionResult<List<GetAllProductsRequestResponse>>> GetAll()
     {
-        this.logger.LogInformation("The getAll endpoint was triggered");
+        logger.LogInformation("The getAll endpoint was triggered");
 
-        return this.Ok(await this.mediator.Send(new GetAllProductsRequest()));
+        return Ok(await mediator.Send(new GetAllProductsRequest()));
     }
     
     [HttpGet("{id:guid}")]
@@ -57,10 +48,10 @@ public class ProductsController : BaseApiController
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<ActionResult<GetSingleProductRequestResponse>> GetById(Guid id)
     {
-        this.logger.LogInformation("The getById endpoint was triggered");
-        this.logger.LogDebug("With the parameter {Parameter}", id);
+        logger.LogInformation("The getById endpoint was triggered");
+        logger.LogDebug("With the parameter {Parameter}", id);
         
-        return this.Ok(await this.mediator.Send(new GetSingleProductRequest(id)));
+        return Ok(await mediator.Send(new GetSingleProductRequest(id)));
     }
     
     [HttpPut("{id:guid}")]
@@ -69,17 +60,17 @@ public class ProductsController : BaseApiController
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<ActionResult<UpdateProductCommandResponse>> Update(Guid id, [FromBody] UpdateProductRequest request)
     {
-        this.logger.LogInformation("The update endpoint was triggered");
-        this.logger.LogDebug("With id {Id} and parameter {@Parameter}", id, request);
+        logger.LogInformation("The update endpoint was triggered");
+        logger.LogDebug("With id {Id} and parameter {@Parameter}", id, request);
 
         var command = new UpdateProductCommand(id, request.Name, request.Price, request.Description, request.CategoryId);
 
-        var response = await this.mediator.Send(command);
+        var response = await mediator.Send(command);
 
-        this.logger.LogInformation("The product was updated successfully");
-        this.logger.LogDebug("Returning with the updated product {@Product}", response);
+        logger.LogInformation("The product was updated successfully");
+        logger.LogDebug("Returning with the updated product {@Product}", response);
         
-        return this.Ok(response);
+        return Ok(response);
     }
 
     [HttpDelete("{id:guid}")]
@@ -88,14 +79,14 @@ public class ProductsController : BaseApiController
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<ActionResult> Delete(Guid id)
     {
-        this.logger.LogInformation("The delete endpoint was triggered");
-        this.logger.LogDebug("With id {Id}", id);
+        logger.LogInformation("The delete endpoint was triggered");
+        logger.LogDebug("With id {Id}", id);
         
-        await this.mediator.Send(new DeleteProductCommand(id));
+        await mediator.Send(new DeleteProductCommand(id));
 
-        this.logger.LogInformation("The product was deleted successfully");
+        logger.LogInformation("The product was deleted successfully");
         
-        return this.NoContent();
+        return NoContent();
     }
     
     /*[HttpPut("{id:guid}/addstock")]
@@ -104,16 +95,16 @@ public class ProductsController : BaseApiController
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<ActionResult<UpdateProductCommandResponse>> Update(Guid id, [FromBody] UpdateProductRequest request)
     {
-        this.logger.LogInformation("The update endpoint was triggered");
-        this.logger.LogDebug("With id {Id} and parameter {@Parameter}", id, request);
+        logger.LogInformation("The update endpoint was triggered");
+        logger.LogDebug("With id {Id} and parameter {@Parameter}", id, request);
         
-        var command = this.mapper.Map<UpdateProductCommand>(request, options => options.AfterMap((_, dest) => dest.Id = id));
+        var command = mapper.Map<UpdateProductCommand>(request, options => options.AfterMap((_, dest) => dest.Id = id));
 
-        var response = await this.mediator.Send(command);
+        var response = await mediator.Send(command);
 
-        this.logger.LogInformation("The product was updated successfully");
-        this.logger.LogDebug("Returning with the updated product {@Product}", response);
+        logger.LogInformation("The product was updated successfully");
+        logger.LogDebug("Returning with the updated product {@Product}", response);
         
-        return this.Ok(response);
+        return Ok(response);
     }*/
 }

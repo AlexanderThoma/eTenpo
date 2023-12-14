@@ -5,20 +5,12 @@ using Swashbuckle.AspNetCore.SwaggerGen;
 
 namespace eTenpo.Product.Api.Swagger;
 
-public class ConfigureSwaggerOptions
+public class ConfigureSwaggerOptions(IApiVersionDescriptionProvider versionDescriptionProvider)
     : IConfigureNamedOptions<SwaggerGenOptions>
 {
-    private readonly IApiVersionDescriptionProvider apiVersionDescriptionProvider;
-
-    public ConfigureSwaggerOptions(
-        IApiVersionDescriptionProvider apiVersionDescriptionProvider)
-    {
-        this.apiVersionDescriptionProvider = apiVersionDescriptionProvider;
-    }
-    
     public void Configure(SwaggerGenOptions options)
     {
-        foreach (var description in apiVersionDescriptionProvider.ApiVersionDescriptions)
+        foreach (var description in versionDescriptionProvider.ApiVersionDescriptions)
         {
             options.SwaggerDoc(
                 description.GroupName,

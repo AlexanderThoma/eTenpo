@@ -5,20 +5,13 @@ using Newtonsoft.Json;
 
 namespace eTenpo.Product.Infrastructure;
 
-public class UnitOfWork : IUnitOfWork
+public class UnitOfWork(ApplicationDbContext dbContext) : IUnitOfWork
 {
-    private readonly ApplicationDbContext dbContext;
-
-    public UnitOfWork(ApplicationDbContext dbContext)
-    {
-        this.dbContext = dbContext;
-    }
-
     public async Task SaveChangesAsync(CancellationToken cancellationToken = default)
     {
         // alternative outbox pattern: https://www.kamilgrzybek.com/blog/posts/the-outbox-pattern
         
-        var events = this.dbContext.ChangeTracker
+        var events = dbContext.ChangeTracker
             .Entries<AggregateRoot>()
             .Select(x => x.Entity)
             .SelectMany(aggregateRoot =>
@@ -42,6 +35,6 @@ public class UnitOfWork : IUnitOfWork
         
         await dbContext.Set<OutboxMessage>().AddRangeAsync(events, cancellationToken);
         
-        _ = await this.dbContext.SaveChangesAsync(cancellationToken);
+        _ = await dbContext.SaveChangesAsync(cancellationToken);
     }
 }

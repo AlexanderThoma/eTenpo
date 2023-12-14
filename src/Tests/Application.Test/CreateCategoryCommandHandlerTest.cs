@@ -5,12 +5,9 @@ using Xunit;
 
 namespace Product.Application.Test;
 
-public class CreateCategoryCommandHandlerTest : BaseApplicationTestFixture
+public class CreateCategoryCommandHandlerTest(IntegrationTestWebApplicationFactory factory)
+    : BaseApplicationTestFixture(factory)
 {
-    public CreateCategoryCommandHandlerTest(IntegrationTestWebApplicationFactory factory) : base(factory)
-    {
-    }
-
     [Fact]
     public async Task ShouldAddNewCategoryToDatabase()
     {

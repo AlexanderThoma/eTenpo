@@ -1,5 +1,3 @@
 ﻿namespace eTenpo.Product.Application.CommandQueryAbstractions;
 
-public interface IDomainEventHandler
-{
-}
+public interface IDomainEventHandler;

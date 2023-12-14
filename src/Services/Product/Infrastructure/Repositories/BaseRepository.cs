@@ -4,15 +4,11 @@ using Microsoft.EntityFrameworkCore;
 
 namespace eTenpo.Product.Infrastructure.Repositories;
 
-public abstract class BaseRepository<TAggregateRoot> where TAggregateRoot : AggregateRoot
+public abstract class BaseRepository<TAggregateRoot>(ApplicationDbContext dbContext)
+    where TAggregateRoot : AggregateRoot
 {
-    protected BaseRepository(ApplicationDbContext dbContext)
-    {
-        this.DbSet = dbContext.Set<TAggregateRoot>();
-    }
-    
-    protected DbSet<TAggregateRoot> DbSet { get; }
-    
+    protected DbSet<TAggregateRoot> DbSet { get; } = dbContext.Set<TAggregateRoot>();
+
     protected IQueryable<TAggregateRoot> ApplySpecification(
         BaseSpecification<TAggregateRoot> specification)
     {
