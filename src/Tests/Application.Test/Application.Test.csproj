@@ -12,12 +12,12 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\Test.Shared\Test.Shared.csproj" />
+        <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.8.0" />
+        <PackageReference Include="TestContainers.Container.Abstractions" Version="1.5.4" />
     </ItemGroup>
 
     <ItemGroup>
-      <PackageReference Include="TestContainers.Container.Abstractions" Version="1.5.4" />
+        <ProjectReference Include="..\Test.Shared\Test.Shared.csproj" />
     </ItemGroup>
-
-
+    
 </Project>
