@@ -22,6 +22,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "GlobalFiles", "GlobalFiles"
 		..\.dockerignore = ..\.dockerignore
 		..\Makefile = ..\Makefile
 		global.json = global.json
+		Directory.Build.props = Directory.Build.props
+		.editorconfig = .editorconfig
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{7D78F69B-FD1C-4266-992A-ACD3693AAA9F}"
