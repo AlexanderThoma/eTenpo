@@ -34,9 +34,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Product", "Product", "{4F65
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Application.Test", "Tests\Application.Test\Application.Test.csproj", "{2B965B5C-05A8-4949-AD1D-8E1FF134BB88}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Test.Shared", "Tests\Test.Shared\Test.Shared.csproj", "{20947D6D-5D67-4C3E-9AD9-DC58D58A5801}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Test.SharedLibrary", "Tests\Test.SharedLibrary\Test.SharedLibrary.csproj", "{20947D6D-5D67-4C3E-9AD9-DC58D58A5801}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Shared", "Shared", "{C4E427AA-98D3-4331-8329-5208B37D2C53}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SharedLibrary", "SharedLibrary", "{C4E427AA-98D3-4331-8329-5208B37D2C53}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

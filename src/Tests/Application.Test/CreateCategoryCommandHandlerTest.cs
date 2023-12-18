@@ -1,6 +1,6 @@
 using eTenpo.Product.Application.CategoryFeature.Create;
 using Product.Application.Test.Base;
-using Shared;
+using SharedLibrary;
 using Xunit;
 
 namespace Product.Application.Test;

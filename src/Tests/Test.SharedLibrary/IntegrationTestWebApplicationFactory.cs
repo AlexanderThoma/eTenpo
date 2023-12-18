@@ -8,7 +8,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Testcontainers.MsSql;
 using Xunit;
 
-namespace Shared;
+namespace SharedLibrary;
 
 public sealed class IntegrationTestWebApplicationFactory : WebApplicationFactory<Program>, IAsyncLifetime
 {
@@ -21,7 +21,7 @@ public sealed class IntegrationTestWebApplicationFactory : WebApplicationFactory
         
         sqlContainer = new MsSqlBuilder().Build();
     }
-    
+
     protected override void ConfigureWebHost(IWebHostBuilder builder)
     {
         builder.ConfigureTestServices(services =>
@@ -48,7 +48,8 @@ public sealed class IntegrationTestWebApplicationFactory : WebApplicationFactory
     
     public new async Task DisposeAsync()
     {
-        await sqlContainer.StopAsync();
+        await sqlContainer.DisposeAsync();
+        dockerHost?.Dispose();
     }
 
     private void EnsureDockerHost()

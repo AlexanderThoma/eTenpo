@@ -1,14 +1,14 @@
 ﻿using MediatR;
 using Microsoft.Extensions.DependencyInjection;
-using Shared;
+using SharedLibrary;
 using Xunit;
 
 namespace Product.Application.Test.Base;
 
 public abstract class BaseApplicationTestFixture : IClassFixture<IntegrationTestWebApplicationFactory>
 {
-    protected readonly ISender Sender;
-    
+    protected ISender Sender { get; }
+
     protected BaseApplicationTestFixture(IntegrationTestWebApplicationFactory factory)
     {
         var scope = factory.Services.CreateScope();

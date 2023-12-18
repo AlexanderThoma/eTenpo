@@ -1,5 +1,5 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using Shared;
+using SharedLibrary;
 using Xunit;
 
 namespace Product.Api.Test.Base;
