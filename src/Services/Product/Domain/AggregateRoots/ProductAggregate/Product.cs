@@ -68,7 +68,7 @@ public class Product : AggregateRoot, IAuditable
         }
         
         this.Price = newPrice;
-        this.AddDomainEvent(new ProductPriceUpdatedEvent(this.Id, this.Price.Value, newPrice.Value));
+        this.AddDomainEvent(new ProductPriceChangedEvent(this.Id, this.Price.Value, newPrice.Value));
     }
     
     public void ChangeCategory(Guid id)

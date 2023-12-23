@@ -1,3 +1,8 @@
 namespace eTenpo.Basket.Api.Models;
 
-public record BasketModel(Guid CustomerId, List<BasketItem> Items);
+public class BasketModel
+{
+    public Guid CustomerId { get; init; }
+
+    public List<BasketItem> Items { get; } = [];
+}
