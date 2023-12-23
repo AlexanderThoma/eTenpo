@@ -1,6 +1,9 @@
+using Asp.Versioning;
+using Asp.Versioning.ApiExplorer;
 using eTenpo.Basket.Api.Endpoints;
 using eTenpo.Basket.Api.Logging;
 using eTenpo.Basket.Api.Services;
+using eTenpo.Basket.Api.Versioning;
 using FluentValidation;
 using Serilog;
 
@@ -14,6 +17,9 @@ builder.Host.UseSerilog((context, configuration) =>
         .Enrich.FromLogContext()
         .Enrich.WithEventTypeEnricher()
 );
+
+builder.Services.AddRouteApiVersioning();
+
 builder.Services.AddStackExchangeRedisCache(options =>
 {
     options.Configuration = builder.Configuration.GetConnectionString("Redis");
@@ -28,15 +34,31 @@ builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
+var versionSet = app.NewApiVersionSet()
+    .HasApiVersion(new ApiVersion(1, 0))
+    .ReportApiVersions()
+    .Build();
+
 if (app.Environment.IsDevelopment())
 {
+    var apiVersionDescriptionProvider = app.Services.GetRequiredService<IApiVersionDescriptionProvider>();
+    
     app.UseSwagger();
-    app.UseSwaggerUI();
+    app.UseSwaggerUI(options =>
+    {
+        foreach (var description in apiVersionDescriptionProvider.ApiVersionDescriptions.Reverse())
+        {
+            options.SwaggerEndpoint($"/swagger/{description.GroupName}/swagger.json",
+                description.GroupName.ToUpperInvariant());
+        }
+        
+        options.DisplayRequestDuration();
+        options.RoutePrefix = string.Empty;
+    });
 }
 
 app.UseHttpsRedirection();
 
-app.MapEndpoints();
+app.MapEndpoints(versionSet);
 
 app.Run();
