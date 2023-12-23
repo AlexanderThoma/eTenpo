@@ -1,6 +1,7 @@
 using eTenpo.Basket.Api.Endpoints;
 using eTenpo.Basket.Api.Logging;
 using eTenpo.Basket.Api.Services;
+using FluentValidation;
 using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -19,6 +20,7 @@ builder.Services.AddStackExchangeRedisCache(options =>
     options.InstanceName = "master";
 });
 
+builder.Services.AddValidatorsFromAssemblyContaining<Program>();
 builder.Services.AddScoped<IBasketRepository, BasketRepository>();
 
 builder.Services.AddEndpointsApiExplorer();
