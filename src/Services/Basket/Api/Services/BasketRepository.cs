@@ -1,3 +1,4 @@
+using System.Collections.Concurrent;
 using System.Text.Json;
 using eTenpo.Basket.Api.Models;
 using Microsoft.Extensions.Caching.Distributed;
@@ -6,6 +7,8 @@ namespace eTenpo.Basket.Api.Services;
 
 public class BasketRepository(IDistributedCache cache) : IBasketRepository
 {
+    private static readonly ConcurrentDictionary<string, bool> CacheKeys = new();
+    
     public async Task<BasketModel?> GetBasket(Guid customerId)
     {
         var result = await cache.GetStringAsync(customerId.ToString());
@@ -20,7 +23,8 @@ public class BasketRepository(IDistributedCache cache) : IBasketRepository
         var basketString = JsonSerializer.Serialize(basket);
         
         await cache.SetStringAsync(basket.CustomerId.ToString(), basketString);
-
+        CacheKeys.TryAdd(basket.CustomerId.ToString(), true);
+        
         return basket;
     }
 
@@ -37,5 +41,11 @@ public class BasketRepository(IDistributedCache cache) : IBasketRepository
     public async Task DeleteBasket(Guid customerId)
     {
         await cache.RemoveAsync(customerId.ToString());
+        CacheKeys.TryRemove(new KeyValuePair<string, bool>(customerId.ToString(), true));
+    }
+
+    public ICollection<string> GetAllCustomers()
+    {
+        return CacheKeys.Keys;
     }
 }

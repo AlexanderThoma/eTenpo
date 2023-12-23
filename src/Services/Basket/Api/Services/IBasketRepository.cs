@@ -8,4 +8,5 @@ public interface IBasketRepository
     Task<BasketModel> CreateBasket(BasketModel basket);
     Task<BasketModel> UpdateBasket(BasketModel updatedBasket);
     Task DeleteBasket(Guid customerId);
+    ICollection<string> GetAllCustomers();
 }
