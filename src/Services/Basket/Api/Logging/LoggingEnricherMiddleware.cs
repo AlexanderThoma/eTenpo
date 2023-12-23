@@ -11,6 +11,9 @@ public class LoggingEnricherMiddleware : IMiddleware
 {
     public async Task InvokeAsync(HttpContext context, RequestDelegate next)
     {
+        ArgumentNullException.ThrowIfNull(context);
+        ArgumentNullException.ThrowIfNull(next);
+        
         var userName = context.User.Identity is { IsAuthenticated: true } ? context.User.Identity.Name : "anonymous";
         LogContext.PushProperty("User", userName);
 

@@ -15,7 +15,6 @@ public class EventTypeEnricher : ILogEventEnricher
     public void Enrich(LogEvent logEvent, ILogEventPropertyFactory propertyFactory)
     {
         ArgumentNullException.ThrowIfNull(logEvent);
-
         ArgumentNullException.ThrowIfNull(propertyFactory);
 
         var murmurHash = MurmurHash.Create32();
@@ -25,5 +24,7 @@ public class EventTypeEnricher : ILogEventEnricher
         
         var eventId = propertyFactory.CreateProperty(EventTypePropertyName, hexadecimalHash);
         logEvent.AddPropertyIfAbsent(eventId);
+        
+        murmurHash.Dispose();
     }
 }
