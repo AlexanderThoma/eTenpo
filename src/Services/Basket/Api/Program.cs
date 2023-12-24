@@ -27,6 +27,8 @@ builder.Services.AddCustomHealthChecks(builder.Configuration);
 
 builder.Services.AddCors();
 
+builder.Services.AddHttpContextAccessor();
+
 builder.Services.AddRouteApiVersioning();
 
 builder.Services.AddStackExchangeRedisCache(options =>
@@ -90,7 +92,7 @@ app.UseSerilogRequestLogging(options =>
     options.EnrichDiagnosticContext = (diagnosticContext, httpContext) =>
     {
         diagnosticContext.Set("HttpMethod", httpContext.Request.Method);
-        diagnosticContext.Set("UserAgent", httpContext.Request.Headers["User-Agent"].FirstOrDefault());
+        diagnosticContext.Set("UserAgent", httpContext.Request.Headers.UserAgent.FirstOrDefault());
         diagnosticContext.Set("QueryString",
             httpContext.Request.QueryString.HasValue ? httpContext.Request.QueryString.Value : string.Empty);
         diagnosticContext.Set("StatusCode", httpContext.Response.StatusCode);
