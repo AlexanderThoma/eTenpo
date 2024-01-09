@@ -2,8 +2,9 @@ using System.Text.Json.Serialization;
 
 namespace eTenpo.Basket.Api.Models;
 
+// seems to have a bug: https://github.com/dotnet/runtime/issues/92877
 // enable to populate read-only properties
-[JsonObjectCreationHandling(JsonObjectCreationHandling.Populate)]
+//[JsonObjectCreationHandling(JsonObjectCreationHandling.Populate)]
 public class BasketModel
 {
     public Guid CustomerId { get; init; }
