@@ -3,7 +3,9 @@
     <CodeAnalysisTreatWarningsAsErrors>false</CodeAnalysisTreatWarningsAsErrors>
     <AnalysisLevel>latest</AnalysisLevel>
     <EnableNETAnalyzers>true</EnableNETAnalyzers>
-    <EnforceCodeStyleInBuild>false</EnforceCodeStyleInBuild><!-- set to false for now -->
+    <EnforceCodeStyleInBuild>false</EnforceCodeStyleInBuild>
+    <!-- Disable reflection for JsonSerializer in order to be AOT ready -->
+    <JsonSerializerIsReflectionEnabledByDefault>false</JsonSerializerIsReflectionEnabledByDefault>
   </PropertyGroup>
 
 </Project>

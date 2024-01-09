@@ -13,14 +13,14 @@ public class BasketRepository(IDistributedCache cache) : IBasketRepository
     {
         var result = await cache.GetStringAsync(customerId.ToString());
 
-        return string.IsNullOrWhiteSpace(result) ? null : JsonSerializer.Deserialize<BasketModel>(result);
+        return string.IsNullOrWhiteSpace(result) ? null : JsonSerializer.Deserialize(result, BasketModelContext.Default.BasketModel);
     }
 
     public async Task<BasketModel> CreateBasket(BasketModel basket)
     {
         ArgumentNullException.ThrowIfNull(basket);
-        
-        var basketString = JsonSerializer.Serialize(basket);
+
+        var basketString = JsonSerializer.Serialize(basket, BasketModelContext.Default.BasketModel);
         
         await cache.SetStringAsync(basket.CustomerId.ToString(), basketString);
         CacheKeys.TryAdd(basket.CustomerId.ToString(), true);

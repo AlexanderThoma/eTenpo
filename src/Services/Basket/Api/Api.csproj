@@ -9,6 +9,7 @@
     <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
     <ImplicitUsings>enable</ImplicitUsings>
     <UserSecretsId>d593f131-b801-4ce0-87a5-a1923130f599</UserSecretsId>
+    <EmitComilerGeneratedFiles>true</EmitComilerGeneratedFiles>
   </PropertyGroup>
 
   <ItemGroup>

@@ -5,6 +5,7 @@ using CorrelationId.DependencyInjection;
 using eTenpo.Basket.Api.Endpoints;
 using eTenpo.Basket.Api.HealthChecks;
 using eTenpo.Basket.Api.Logging;
+using eTenpo.Basket.Api.Models;
 using eTenpo.Basket.Api.Services;
 using eTenpo.Basket.Api.Versioning;
 using FluentValidation;
@@ -25,7 +26,13 @@ builder.Host.UseSerilog((context, configuration) =>
 
 builder.Services.AddCustomHealthChecks(builder.Configuration);
 
+builder.Services.ConfigureHttpJsonOptions(options =>
+{
+    options.SerializerOptions.TypeInfoResolverChain.Insert(0, BasketModelContext.Default);
+});
+
 builder.Services.AddCors();
+//builder.Services.AddRequestTimeouts();
 
 builder.Services.AddHttpContextAccessor();
 
@@ -138,5 +145,7 @@ app.MapHealthChecks("/healthz/readiness", new HealthCheckOptions
 });
 
 app.MapEndpoints(versionSet);
+
+//app.UseRequestTimeouts();
 
 app.Run();

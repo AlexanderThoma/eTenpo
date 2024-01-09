@@ -3,6 +3,10 @@ using eTenpo.Basket.Api.Services;
 
 namespace eTenpo.Basket.Api.Events.ProductPriceChangedEvent;
 
+/*
+ * TODO: Add MassTransit to solution for handling of messaging
+ */
+
 public class ProductPriceChangedEventHandler(IBasketRepository basketRepository)
 {
     public async Task Handle(ProductPriceChangedEvent @event)
