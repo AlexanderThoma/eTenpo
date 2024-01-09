@@ -33,14 +33,14 @@ public static class BasketEndpoints
         return app;
     }
 
-    public static async Task<CreatedAtRoute> CreateBasket(
+    public static async Task<CreatedAtRoute<BasketModel>> CreateBasket(
         [FromBody] BasketModel basket,
         IBasketRepository basketRepository)
     {
         ArgumentNullException.ThrowIfNull(basketRepository);
         var resultBasket = await basketRepository.CreateBasket(basket);
 
-        return TypedResults.CreatedAtRoute(nameof(GetBasket), new { customerId = resultBasket.CustomerId });
+        return TypedResults.CreatedAtRoute(resultBasket, nameof(GetBasket), new { customerId = resultBasket.CustomerId });
     }
     
     public static async Task<Results<Ok<BasketModel>, NotFound<ProblemDetails>>> GetBasket(
