@@ -75,7 +75,10 @@ app.UseCors(x => x
     .AllowAnyMethod()
     .AllowAnyHeader());
 
-if (app.Environment.IsDevelopment())
+// TODO: active Swagger UI as soon as System.Text.Json source generation is activated in SwaggerUIMiddleware
+// Swagger UI uses reflection internally. This project disables reflection and therefore it can not be used.
+// Correlated Github issue: https://github.com/domaindrivendev/Swashbuckle.AspNetCore/issues/2550
+/*if (app.Environment.IsDevelopment())
 {
     var apiVersionDescriptionProvider = app.Services.GetRequiredService<IApiVersionDescriptionProvider>();
     
@@ -91,7 +94,7 @@ if (app.Environment.IsDevelopment())
         options.DisplayRequestDuration();
         options.RoutePrefix = string.Empty;
     });
-}
+}*/
 
 app.UseSerilogRequestLogging(options =>
 {
