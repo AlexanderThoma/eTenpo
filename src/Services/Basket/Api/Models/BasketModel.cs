@@ -8,7 +8,7 @@ public class BasketModel
 {
     public Guid CustomerId { get; init; }
 
-    public List<BasketItem> Items { get; } = [];
+    public List<BasketItem> Items { get; init; } = [];
 }
 
 [JsonSourceGenerationOptions(PropertyNamingPolicy = JsonKnownNamingPolicy.CamelCase, WriteIndented = true)]
